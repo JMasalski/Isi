@@ -1,6 +1,3 @@
-# Napisz program, który sprawdza czy wczytany łańcuch znakowy jest liczbą lub nie. Muszą być wczytane co najmniej dwa znaki.
-# Hint: skorzystaj z funkcji all().
-
 def checkIsDigList(wej):
     if len(wej) < 2:
         return "Za krótki ciąg znaków"
