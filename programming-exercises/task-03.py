@@ -3,7 +3,7 @@
 # Hint: skorzystaj z funkcji find().
 
 def znajdzCiag(ciag, szukana):
-    if ciag.find(szukana) == -1:
+    if szukana not in ciag:
         return "Nie ma takiego znaku"
     return ciag.find(szukana)
 
