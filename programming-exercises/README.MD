@@ -163,6 +163,48 @@ Prosta gra, program generuje losową liczbę od 1 do 100, użytkownik ma odgadn�
 
 # Exercise-21
 Dziedziczenie klas. Klasa Animal ma zawierać atrybuty takie jak name, age, sex oraz metodę sound(). Klasy Dog, Cat oraz Fox dziedziczą po klasie Animal oraz nadpisują funkcje sound() odpowiednimi dźwiękami, dodatkowo klasy Dog oraz Cat posiadają atrybut breed.
+
 [Exercise-21](task-21.py)
 
 ![task21](screenshot/task21.png)
+
+# Exercise-22
+
+Należy wykorzystać plik wordlist_10000.txt i stworzyć funkcję wyszukującą najdłuższy wyraz w tym pliku oraz drugą funkcję, która wyszuka wyrazy o długości 10.
+
+[Exercise-22](task-22.py)
+
+![task22](screenshot/task22.png)
+
+# Exercise-23
+
+Za pomocą pętli stworzyć 1000 losowych 6 znakowych wyrazów [A-Z][a-z][0-9] i zapisać je do pliku passwords.txt.
+
+[Exercise-23](task-23.py)
+
+![task23](screenshot/task23.png)
+
+
+# Exercise-24
+
+Napisać funkcję tworzącą plik pc.csv. Pierwszy wiersz ma zawierać nazwy kolumn: pc_name, ip. Nazwy komputerów mają zaczynać się literą P oraz 4 oktetem adresu ip. Adresy zaczynają się od 172.30.2.1 do 172.30.2.100. Plik csv ma być rozdzielany przecinkami.
+
+[Exercise-24](task-24.py)
+
+![task24](screenshot/task24.png)
+
+# Exercise-25
+
+Za pomocą pakietu do web-scrappingu, np.beautifulsoup lub jsoup, zapisać do tablicy wszystkie hiperłącza występujące na wybranej przez siebie stronie.
+
+[Exercise-25](task-25.py)
+
+![task25](screenshot/task25.png)
+
+# Exercise-26
+
+Za pomocą webscrappera pobrać wszystkie oferty domów z podanego linku(https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie/pomorskie/gdynia/gdynia/gdynia?priceMax=600000&viewType=listing), każda oferta ma być obiektem klasy Home, który posiada atrybuty takie jak header_name, price, price_for_m2. Wszystkie obiekty zapisać do słownika oraz do pliku home.csv.
+
+[Exercise-26](task-26.py)
+
+![task26](screenshot/task26.png)
