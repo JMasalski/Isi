@@ -45,8 +45,23 @@ Hint: skorzystaj z modułów string i random.
 [Exercise-06](task-06.py).
 ![task06](screenshot/task06.png)
 
+# Exercise-07
+Stwórz folder utils, a w nim plik 'obliczenia.py', w którym należy zaimplementować cztery wybrane funkcje matematyczne z modułu math.
+Następnie należy utworzyć plik skrypt7-nr_albumu.py i zaimportować w nim ww. funkcje do obliczeń na przykładowych wartościach.
 
+[Exercise-07](task-07.py)
 
+[Obliczenia](utils/obliczenia.py)
+
+![task07](screenshot/task07.png)
+
+# Exercise-08
+Napisz program, który generuje losowy ciąg znaków o długości 100, a następnie utwórz słownik którego kluczami będą unikalne znaki występujące w ciągu, a wartościami liczba ich wystąpień w ciągu znakowym. Utwórz listę, której każdy element to krotka (tupla), zawierająca kolejny klucz z ww. słownika i odpowiadającą mu wartość liczbową.
+Hint: skorzystaj z modułu collections i klasy Counter().
+
+[Exercise-08](task-08.py)
+
+![task08](screenshot/task08.png)
 
 
 
