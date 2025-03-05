@@ -35,6 +35,19 @@ Napisz program (na dwa sposoby), który szuka pierwiastków liczb od 1 do 256 (w
 Hint: skorzystaj z modułu math i z tzw. 'list comprehensions'.
 
 [Exercise-05](task-05.py).
-
 ![task05](screenshot/task05.png)
+
+# Exercise-06
+Napisz program, który tworzy słownik o nazwie zawierającej Twój numer albumu.
+Kluczami powinny być liczby od 10 do 20, a wartościami pseudolosowe łańcuch znaków o długości 8.
+Hint: skorzystaj z modułów string i random.
+
+[Exercise-06](task-06.py).
+![task06](screenshot/task06.png)
+
+
+
+
+
+
 
