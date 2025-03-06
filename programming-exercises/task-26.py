@@ -31,10 +31,10 @@ def fetch_homes():
     for listing in listings:
         header_name = listing.find('p', {'data-cy': 'listing-item-title'}).text.strip() if listing.find('p', {'data-cy': 'listing-item-title'}) else 'Brak tytułu'
 
-        price_tag = listing.find('span', {'class': 'css-2bt9f1 evk7nst0'})  # Sprawdź, czy klasa jest prawidłowa
+        price_tag = listing.find('span', {'class': 'css-2bt9f1 evk7nst0'})
         if price_tag:
             price = price_tag.text.strip().replace('\xa0', ' ').replace('zł', '').strip()
-        print(price)
+
 
         price_for_m2_tag = listing.find('dt', string='Cena za metr kwadratowy')
         if price_for_m2_tag:
@@ -56,8 +56,6 @@ def save_to_csv(homes):
 
 def main():
     homes = fetch_homes()
-    homes_dict = {i: home for i, home in enumerate(homes, 1)}
-
     save_to_csv(homes)
 
 if __name__ == '__main__':
