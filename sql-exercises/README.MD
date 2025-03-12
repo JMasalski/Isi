@@ -144,9 +144,75 @@ WHERE body_mass_g > 3000
 # Exercise-14
 How many different body masses are in the penguins dataset?
 ```sqlite
-SELECT AVG(body_mass_g)
+SELECT COUNT(DISTINCT body_mass_g)
 FROM penguins
-WHERE body_mass_g > 3000
+
 ```
 
 ![exercise-14](screenshots/exercise-14.png).
+
+# Exercise-15
+Explain why the output of the previous query has a blank line before the rows for female and male penguins.
+# ODP
+Ma pustą linię przed wierszami dla samic i samców, ponieważ w kolumnie sex lub body_mass_g mogą występować wartości NULL. Wartość NULL w kolumnie sex powoduje pojawienie się pustego wiersza na początku wyniku zapytania.
+
+Write a query that shows each distinct body mass in the penguin dataset and the number of penguins that weigh that much.
+```sqlite
+SELECT
+    body_mass_g,
+    COUNT(*) AS penguin_count
+FROM penguins
+GROUP BY body_mass_g;
+
+
+```
+
+![exercise-15](screenshots/exercise-15.png).
+
+# Exercise-16
+Write a query that uses filter to calculate the average body masses of heavy penguins (those over 4500 grams) and light penguins (those under 3500 grams) simultaneously. Is it possible to do this using where instead of filter?
+
+```sqlite
+SELECT
+    ROUND(AVG(body_mass_g) FILTER (WHERE body_mass_g > 4500), 1) AS avg_heavy_mass,
+    ROUND(AVG(body_mass_g) FILTER (WHERE body_mass_g < 3500), 1) AS avg_light_mass
+FROM penguins;
+```
+
+![exercise-16](screenshots/exercise-16.png).
+
+# Exercise-16
+Write a query that uses filter to calculate the average body masses of heavy penguins (those over 4500 grams) and light penguins (those under 3500 grams) simultaneously. Is it possible to do this using where instead of filter?
+
+```sqlite
+CREATE TABLE notes (
+    author TEXT,
+    note TEXT
+);
+
+INSERT INTO notes (author, note) VALUES ('Alice', 'Buy groceries');
+INSERT INTO notes (author, note) VALUES ('Bob', 'Finish project');
+INSERT INTO notes (author, note) VALUES ('Charlie', 'Call mom');
+INSERT INTO notes (author, note) VALUES ('Diana', 'Read a book');
+```
+
+![exercise-17](screenshots/exercise-17.0.png).
+![exercise-17.1](screenshots/exercise-17.1.png).
+
+# Exercise-18
+What happens if you try to delete rows that don't exist (e.g., all entries in work that refer to juna)?
+```
+Zapytanie zostanie wykonane pomyślnie a liczba wierszy usuniętych będzie wynosić 0
+```
+
+# Exercise-19
+Saving and restoring data as text:
+
+Re-create the notes table in an in-memory database and then use SQLite's .output and .dump commands to save the database to a file called notes.sql. Inspect the contents of this file: how has your data been stored?
+```sqlite
+.output notes.sql
+.dump
+.output stdout
+```
+
+![exercise-19](screenshots/exercise-19.png).
