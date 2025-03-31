@@ -11,4 +11,4 @@ todoRoutes.put('/:id',updateTodo);
 todoRoutes.delete('/:id',deleteTodo);
 
 
-export default todoRoute;
+export default todoRoutes;

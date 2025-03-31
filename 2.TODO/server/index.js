@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import connectDB from './db/db.js';
-
+import todoRoutes from "./routes/todo.route.js";
 
 const app = express();
 
@@ -18,6 +18,8 @@ app.use(express.json());
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
+app.use('/todos', todoRoutes);
 
 
 app.listen(PORT,()=>{
