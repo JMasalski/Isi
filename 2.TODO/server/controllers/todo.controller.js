@@ -43,7 +43,6 @@ export const updateTodo = async (req, res) => {
 }
 export const deleteTodo = async (req, res) => {
     const {id} = req.params;
-    console.log(id)
     try{
         const deletedTodo = await Todo.findOneAndDelete({
             _id: id

@@ -9,7 +9,6 @@ export const useTodoStore = create ((set) => ({
         try{
             set ({loading: true});
             const res = await axiosInstance.post('/todos', {title});
-            console.log('new todo', res.data.todo);
             const newTodo = res.data.todo;
             set(state=> ({todos: [...state.todos, newTodo]}));
         }catch(err){
@@ -23,7 +22,6 @@ export const useTodoStore = create ((set) => ({
             set({ loading: true });
             const res = await axiosInstance.get("/todos");
             set({ todos: res.data.todos });
-            console.log(res.data);
         } catch (err) {
             console.log(err.message);
         } finally {
