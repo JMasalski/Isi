@@ -9,7 +9,7 @@ export const useTodoStore = create ((set) => ({
         try{
             set ({loading: true});
             const res = await axiosInstance.post('/todos', {title});
-            const newTodo = res.data;
+            const newTodo = res.data.todo;
             set(state=> ({todos: [...state.todos, newTodo]}));
         }catch(err){
             console.log(err.message);
@@ -21,12 +21,32 @@ export const useTodoStore = create ((set) => ({
         try {
             set({ loading: true });
             const res = await axiosInstance.get("/todos");
-            set({ todos: res.data.todos });  // Ustawienie danych w Zustand!
-            console.log(res.data);
+            set({ todos: res.data.todos });
         } catch (err) {
             console.log(err.message);
         } finally {
             set({ loading: false });
+        }
+    },
+    deleteTodo: async (id) =>{
+        try{
+            const res = await axiosInstance.delete(`/todos/${id}`)
+            set({todos: res.data.todos})
+        }catch(err){
+            console.log(err.message);
+        }
+    },
+    toggleTodo: async (id, completed) => {
+        try {
+            const res = await axiosInstance.put(`/todos/${id}`, { completed });
+            const UpdatedNewTodo = res.data.updatedTodo; // lub `res.data`, zależy od backendu
+            set(state => ({
+                todos: state.todos.map(todo =>
+                    todo._id === id ? UpdatedNewTodo : todo
+                )
+            }));
+        } catch (err) {
+            console.error(err.message);
         }
     }
 }))
