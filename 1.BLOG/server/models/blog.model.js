@@ -11,12 +11,35 @@ const blogSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    author:{
+    author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-
-},{timestamps: true})
+    comments: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                required: true,
+            },
+            text: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now,
+            }
+        }
+    ],
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
+}, { timestamps: true })
 
 export const Blog = mongoose.model('Blog', blogSchema)
