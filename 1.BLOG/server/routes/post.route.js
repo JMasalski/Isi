@@ -11,18 +11,28 @@ import {
 
 const postRouter = Router();
 
-
-postRouter.post('/create-post', createPost);
+//http://localhost:3000/api/v1/post/create-post
+postRouter.post('/create-post',protectRoute,createPost);
+//http://localhost:3000/api/v1/post/get-posts
 postRouter.get('/get-posts', getPosts);
-postRouter.get('/get-my-posts', getMyPosts);
+//http://localhost:3000/api/v1/post/get-my-posts
+postRouter.get('/get-my-posts', protectRoute ,getMyPosts);
+//http://localhost:3000/api/v1/post/post/:id
 postRouter.get('/post/:id', getPostById);
+//http://localhost:3000/api/v1/post/edit-post/:id
 postRouter.put('/edit-post/:id', protectRoute, editPost);
-postRouter.delete('/delete-post',protectRoute,deletePost);
+//http://localhost:3000/api/v1/post/delete-post
+postRouter.delete('/delete-post/:id',protectRoute,deletePost);
 
-postRouter.put('/toggle-like',toggleLike);
-postRouter.post('/add-comment', addComment);
-postRouter.put('/comment/:commentId', protectRoute, editComment)
-postRouter.delete('/comment/:commentId', protectRoute, deleteComment)
+
+//http://localhost:3000/api/v1/post/toggle-like
+postRouter.put('/toggle-like',protectRoute,toggleLike);
+//http://localhost:3000/api/v1/post/add-comment
+postRouter.put('/add-comment', protectRoute,addComment);
+//http://localhost:3000/api/v1/post/edit-comment
+postRouter.put('/edit-comment/', protectRoute, editComment)
+//http://localhost:3000/api/v1/post/delete-comment
+postRouter.delete('/delete-comment/', protectRoute, deleteComment)
 
 
 export default postRouter;

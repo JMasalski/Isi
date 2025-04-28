@@ -6,8 +6,8 @@ import {User} from "../models/user.model.js";
 
 dotenv.config();
 
-const signToken = (userID) =>{
-    return jwt.sign({userID}, process.env.JWT_SECRET,{expiresIn:'1d'})
+const signToken = (id) =>{
+    return jwt.sign({id}, process.env.JWT_SECRET,{expiresIn:'1d'})
 }
 export const signUp = async (req,res ) =>{
     const {name,email,password} = req.body;
