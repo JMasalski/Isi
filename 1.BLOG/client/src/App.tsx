@@ -1,8 +1,12 @@
+import React from 'react'
+import { Button } from './components/ui/button'
+import AuthForm from './components/AuthForm'
+
 const App = () => {
   return (
-    <h1 className="text-3xl text-red-500">
-      Hello world!
-  </h1>
+    <div className="p-4 ">
+      <AuthForm/>
+  </div>
   )
 }
 
