@@ -1,8 +1,21 @@
+import { Route, Routes } from "react-router"
+import HomePage from "./pages/HomePage"
+import LoginPage from "./pages/LoginPage"
+import SignUpPage from "./pages/SignUpPage"
+import AddPostPage from "./pages/AddPostPage"
+import ProfilePage from "./pages/ProfilePage"
+
 const App = () => {
   return (
-    <h1 className="text-3xl text-red-500">
-      Hello world!
-  </h1>
+    <div className="h-screen ">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/create-post" element={<AddPostPage/>} />
+        <Route path= "/profile/:username" element={<ProfilePage />} />
+      </Routes>
+    </div>
   )
 }
 
