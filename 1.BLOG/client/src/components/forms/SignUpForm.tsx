@@ -15,6 +15,7 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
+import {Shuffle} from "lucide-react";
 
 const SignUpForm = () => {
     const [avatarUrl, setAvatarUrl] =useState("")
@@ -65,7 +66,7 @@ const SignUpForm = () => {
                                         form.setValue("profilePic", newUrl);
                                     }}
                                 >
-                                    Change Avatar
+                                    Change Avatar <Shuffle />
                                 </Button>
                             </div>
                             <FormMessage />
@@ -79,7 +80,7 @@ const SignUpForm = () => {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="Your name..." {...field} />
                             </FormControl>
                             <FormDescription className="text-md ">
                                 This is your public display name.
