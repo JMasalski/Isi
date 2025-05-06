@@ -7,7 +7,7 @@ import ProfilePage from "./pages/ProfilePage"
 
 const App = () => {
   return (
-    <div className="h-screen ">
+    <div className="h-screen bg-[#daf5f0]">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
