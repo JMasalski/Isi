@@ -35,12 +35,16 @@ export const signUp = async (req,res ) =>{
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        
 
+        const idx = Math.floor(Math.random() * 100)+1;
+        const profilePic = `https://avatar.iran.liara.run/public/${idx}.png`
 
         const newUser = await User.create([{
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            profilePic
         }],{session})
 
 
