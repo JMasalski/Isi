@@ -1,9 +1,9 @@
 import { Blog } from "../models/blog.model.js";
 
 export const createPost = async (req, res) => {
-  const { title, content } = req.body;
+  const { content } = req.body;
   const id = req.user.id;
-  if (!title || !content) {
+  if (!content) {
     return res.status(400).json({
       success: false,
       message: "Please provide all fields",
@@ -12,7 +12,7 @@ export const createPost = async (req, res) => {
 
   try {
     const blog = await Blog.create({
-      title,
+
       content,
       author: id,
     });
@@ -30,25 +30,38 @@ export const createPost = async (req, res) => {
 };
 export const getPosts = async (req, res) => {
   try {
-    const posts = await Blog.find()
-      .sort({ createdAt: -1 })
-      .populate("author", "name")
-      .populate({
-        path: "comments.user",
-        select: "name -_id",
-      })
-      .populate("likes", "name -_id");
+    const limit = parseInt(req.query.limit) || 10;
+    const cursor = req.query.cursor;
+
+    let query = {};
+    if (cursor) {
+      // Pobieramy post referencyjny (aby znać jego createdAt)
+      const cursorPost = await Blog.findById(cursor);
+      if (!cursorPost) return res.status(404).json({ message: "Cursor not found" });
+
+      query = { createdAt: { $lt: cursorPost.createdAt } };
+    }
+
+    const posts = await Blog.find(query)
+        .sort({ createdAt: -1 })
+        .limit(limit + 1)
+        .populate("author", "name")
+        .populate({
+          path: "comments.user",
+          select: "name -_id",
+        })
+        .populate("likes", "name -_id");
+
+    const hasMore = posts.length > limit;
+    const resultPosts = hasMore ? posts.slice(0, -1) : posts;
 
     res.status(200).json({
-      success: true,
-      posts,
+      posts: resultPosts,
+      nextCursor: hasMore ? resultPosts[resultPosts.length - 1]._id : null,
     });
   } catch (err) {
-    console.log("Error in getPosts: ", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
+    console.error("Pagination error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 export const getMyPosts = async (req, res) => {
