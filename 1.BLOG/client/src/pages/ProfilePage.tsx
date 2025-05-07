@@ -1,8 +1,10 @@
+import {useParams} from "react-router";
 
 
 const ProfilePage = () => {
+  const {username} = useParams()
   return (
-    <div>ProfilePage</div>
+    <div>{`ProfilePage ${username}`}</div>
   )
 }
 

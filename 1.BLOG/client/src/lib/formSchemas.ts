@@ -15,3 +15,6 @@ export const registerSchema = z.object({
     message: "Passwords do not match",
     path: ["confirmPassword"],
 })
+
+export type SignupData = Omit<z.infer<typeof registerSchema>, "confirmPassword">;
+export type LoginData = z.infer<typeof loginSchema>;

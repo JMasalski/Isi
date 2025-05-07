@@ -10,7 +10,7 @@ const signToken = (id) =>{
     return jwt.sign({id}, process.env.JWT_SECRET,{expiresIn:'1d'})
 }
 export const signUp = async (req,res ) =>{
-    const {name,email,password} = req.body;
+    const {name,email,password,profilePic} = req.body;
     if(!name || !email || !password){
         return res.status(400).json({
             success:false,
@@ -36,9 +36,6 @@ export const signUp = async (req,res ) =>{
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         
-
-        const idx = Math.floor(Math.random() * 100)+1;
-        const profilePic = `https://avatar.iran.liara.run/public/${idx}.png`
 
         const newUser = await User.create([{
             name,
@@ -124,8 +121,5 @@ export const signOut = async (req,res ) =>{
 }
 
 export const currentUser = async(req, res ) =>{
-    res.send({
-        success:true,
-        user:req.user
-    })
+    res.status(200).json({ success: true, user: req.user });
 }

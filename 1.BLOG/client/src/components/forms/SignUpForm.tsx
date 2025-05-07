@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
-import {registerSchema} from "@/lib/formSchemas.ts";
+import {registerSchema, SignupData} from "@/lib/formSchemas.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {
     Form,
@@ -16,9 +16,13 @@ import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 import {Shuffle} from "lucide-react";
+import useSignUp from "@/hooks/useSignUp.tsx";
 
 const SignUpForm = () => {
     const [avatarUrl, setAvatarUrl] =useState("")
+    const {isPending,signUpMutation}= useSignUp()
+
+
 
     const form = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
@@ -32,9 +36,8 @@ const SignUpForm = () => {
     })
 
     function onSubmit(values: z.infer<typeof registerSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        const { confirmPassword, ...dataToSend } = values;
+        signUpMutation(dataToSend as SignupData);
     }
     useEffect(() => {
         const randomIdx = Math.floor(Math.random() * 100) + 1;
@@ -42,6 +45,7 @@ const SignUpForm = () => {
         setAvatarUrl(url);
         form.setValue("profilePic", url); // zapisujemy do formularza
     }, []);
+
 
     return (
         <Form {...form}>
@@ -129,7 +133,9 @@ const SignUpForm = () => {
                     )}
                 />
 
-                <Button variant={"elevated"} type="submit" className="w-full">Submit</Button>
+                <Button variant={"elevated"} type="submit" className="w-full">
+                    {isPending ? "Signing up..." : "Sign Up"}
+                </Button>
             </form>
         </Form>
     )
