@@ -1,7 +1,8 @@
 import { Blog } from "../models/blog.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const createPost = async (req, res) => {
-  const { content } = req.body;
+  const { content,image } = req.body;
   const id = req.user.id;
   if (!content) {
     return res.status(400).json({
@@ -9,12 +10,17 @@ export const createPost = async (req, res) => {
       message: "Please provide all fields",
     });
   }
+  let imageUrl;
 
+  if(image){
+    const uploadRes = await cloudinary.uploader.upload(image);
+    imageUrl = uploadRes.secure_url
+  }
   try {
     const blog = await Blog.create({
-
       content,
       author: id,
+      image: imageUrl
     });
     res.status(201).json({
       success: true,

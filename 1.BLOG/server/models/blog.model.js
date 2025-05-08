@@ -34,7 +34,10 @@ const blogSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
         }
-    ]
+    ],
+    image:{
+        type: String,
+    }
 }, { timestamps: true })
 
 export const Blog = mongoose.model('Blog', blogSchema)
