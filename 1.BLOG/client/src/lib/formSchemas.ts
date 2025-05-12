@@ -16,5 +16,10 @@ export const registerSchema = z.object({
     path: ["confirmPassword"],
 })
 
+export const postSchema = z.object({
+    content: z.string().min(1, "You can't add an empty post"),
+    image: z.string().optional(),
+})
+
 export type SignupData = Omit<z.infer<typeof registerSchema>, "confirmPassword">;
 export type LoginData = z.infer<typeof loginSchema>;

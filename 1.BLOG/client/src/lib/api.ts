@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axios.ts";
 import {LoginData, SignupData} from "@/lib/formSchemas.ts";
+import { PostFormData } from "@/types/post";
 
 export const signup = async (signupData: SignupData)=>{
     const res = await axiosInstance.post("/auth/sign-up", signupData);
@@ -24,4 +25,18 @@ export const getAuthUser = async () => {
         console.log("Error fetching user data:", error);
         return null;
     }
+}
+
+export const createPost = async (postData: PostFormData) => {
+    const res = await axiosInstance.post("/post/create-post", postData);
+    return res.data;
+}
+export const getPosts = async () => {
+    const res = await axiosInstance.get("/post/get-posts");
+    return res.data.posts;
+}
+
+export const addComment = async ({postId, text}: {postId:string, text:string}) => {
+    const res = await axiosInstance.post(`/${postId}/add-comment`,{text})
+    return res.data;
 }

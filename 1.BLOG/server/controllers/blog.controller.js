@@ -51,10 +51,10 @@ export const getPosts = async (req, res) => {
     const posts = await Blog.find(query)
         .sort({ createdAt: -1 })
         .limit(limit + 1)
-        .populate("author", "name")
+        .populate("author", "name profilePic")
         .populate({
           path: "comments.user",
-          select: "name -_id",
+          select: "name profilePic -_id",
         })
         .populate("likes", "name -_id");
 

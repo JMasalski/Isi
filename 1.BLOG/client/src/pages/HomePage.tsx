@@ -1,20 +1,33 @@
 import {Link} from "react-router";
 import {Bell, Bookmark, Home, Mail, Search, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
+
 import {Input} from "@/components/ui/input.tsx";
 import {useEffect, useState} from "react";
 import {generateDummyPosts} from "@/lib/constants.ts";
 import {Post} from "@/types/post.ts";
 import PostCard from "@/components/PostCard.tsx";
 
+import NewPostForm from "@/components/forms/NewPostForm";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getPosts } from "@/lib/api";
+
 const HomePage = () => {
     const [dummyPost, setPosts] = useState<Post[]>([]);
 
-    useEffect(() => {
-        const dummyPosts = generateDummyPosts(50);
-        setPosts(dummyPosts);
-    }, []);
+    const queryClienyt = useQueryClient();
+    const {data:allPosts, isLoading, error} = useQuery({
+        queryKey: ["posts"],
+        queryFn: getPosts,
+    })
+    
+    console.log("Data", allPosts);
+
+
+    // useEffect(() => {
+    //     const dummyPosts = generateDummyPosts(50);
+    //     setPosts(dummyPosts);
+    // }, []);
 
 
 
@@ -23,6 +36,7 @@ const HomePage = () => {
             {/* Main layout */}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 p-4">
                 {/* Left sidebar */}
+                {/* //TODO: MAKE IT RESPONSIVE AND STICKY  */}
                 <div className="md:col-span-3">
                     <div
                         className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -82,28 +96,11 @@ const HomePage = () => {
                         className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
                         <h1 className="text-2xl font-black mb-4">Home</h1>
                         {/* Post creation */}
-                        <div className="flex gap-3 mb-6">
-                            <Avatar className="border-2 border-black">
-                                <AvatarImage src="/placeholder.svg?height=40&width=40" alt="@user"/>
-                                <AvatarFallback className="bg-pink-300">UN</AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                                <Input
-                                    placeholder="What's happening?"
-                                    // className="border-4 border-black rounded-xl mb-2 p-4 text-lg focus-visible:ring-0 focus-visible:ring-offset-0"
-                                />
-                                <div className="flex justify-end mt-2">
-                                    <Button variant={"elevated"}
-                                            className="bg-cyan-400 hover:bg-cyan-500 text-black font-bold rounded-xl">
-                                        Post
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
+                            <NewPostForm/>
                         {/* Feed */}
                         <div className="space-y-6">
                             {/* Post 1 */}
-                            {dummyPost.map((post) => <PostCard key={post._id} post={post}/>)}
+                            {allPosts?.map((post:Post) => <PostCard key={post._id} post={post}/>)}
                             {/* Right sidebar */}
                         </div>
                     </div>

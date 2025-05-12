@@ -4,6 +4,7 @@ export type Post = {
     author: {
         _id: string;
         name: string;
+        profilePic:string
     };
     comments: {
         user: {
@@ -15,5 +16,8 @@ export type Post = {
     likes: {
         name: string;
     }[];
+    image: string | null;
     createdAt: string;
 };
+
+export type PostFormData = Omit<Post, "_id" | "author" | "comments" | "likes" | "createdAt"> 
