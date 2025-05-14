@@ -26,7 +26,7 @@ postRouter.delete('/delete-post/:id',protectRoute,deletePost);
 
 
 //http://localhost:3000/api/v1/post/toggle-like
-postRouter.put('/toggle-like',protectRoute,toggleLike);
+postRouter.put('/:postId/toggle-like',protectRoute,toggleLike);
 //http://localhost:3000/api/v1/post/add-comment
 postRouter.put('/:postId/add-comment', protectRoute,addComment);
 //http://localhost:3000/api/v1/post/edit-comment

@@ -37,6 +37,11 @@ export const getPosts = async () => {
 }
 
 export const addComment = async ({postId, text}: {postId:string, text:string}) => {
-    const res = await axiosInstance.post(`/${postId}/add-comment`,{text})
+    const res = await axiosInstance.put(`post/${postId}/add-comment`,{text})
     return res.data;
+}
+
+export const toggleLike = async  ({postId}:{postId:string}) => {
+    const res = await axiosInstance.put(`post/${postId}/toggle-like`)
+    return res.data
 }

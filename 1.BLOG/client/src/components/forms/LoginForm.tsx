@@ -14,6 +14,7 @@ import {
 
 import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import UseSignIn from "@/hooks/useSignIn.tsx";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -23,11 +24,9 @@ const LoginForm = () => {
       password: "",
     },
   })
-
+    const {isPending, signInMutation} = UseSignIn()
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+    signInMutation({email: values.email, password: values.password})
   }
   return (
       <Form {...form}>
@@ -37,9 +36,9 @@ const LoginForm = () => {
               name="email"
               render={({field}) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="johndoe@mail.com" {...field} />
                     </FormControl>
                     <FormMessage/>
                   </FormItem>
@@ -58,7 +57,9 @@ const LoginForm = () => {
                   </FormItem>
               )}
           />
-          <Button variant={"elevated"} type="submit" className="w-full">Login</Button>
+          <Button variant={"elevated"} type="submit" className="w-full">
+              {isPending ? "Loading...": "Login"}
+          </Button>
         </form>
       </Form>
   )

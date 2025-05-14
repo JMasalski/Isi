@@ -56,7 +56,7 @@ export const getPosts = async (req, res) => {
           path: "comments.user",
           select: "name profilePic -_id",
         })
-        .populate("likes", "name -_id");
+        .populate("likes", "_id");
 
     const hasMore = posts.length > limit;
     const resultPosts = hasMore ? posts.slice(0, -1) : posts;
@@ -157,7 +157,7 @@ export const deletePost = async (req, res) => {
 };
 export const toggleLike = async (req, res) => {
   try {
-    const { postId } = req.body;
+    const { postId } = req.params;
     const post = await Blog.findById(postId);
 
     if (!post) {
@@ -192,7 +192,8 @@ export const toggleLike = async (req, res) => {
 };
 export const addComment = async (req, res) => {
   try {
-    const { postId, text } = req.body;
+    const {text } = req.body;
+    const {postId} = req.params
     const post = await Blog.findById(postId);
 
     if (!post) {

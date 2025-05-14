@@ -30,11 +30,12 @@ const App = () => {
     return (
         <div className="h-screen bg-[#daf5f0]">
             <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/" element={isAuthenticated ? <HomePage/> : <Navigate to="/signup" />} />
+                <Route path="/login" element={isAuthenticated ?<HomePage/> :<LoginPage />} />
+                <Route path="/signup" element={isAuthenticated ?<HomePage/> :<SignUpPage />} />
 
                 {/* Jeśli użytkownik jest zalogowany, dostęp do podstrony */}
+                <Route path="/" element={isAuthenticated ? <HomePage/> : <Navigate to="/signup" />} />
                 <Route
                     path="/create-post"
                     element={isAuthenticated ? <AddPostPage /> : <Navigate to="/signup" />}

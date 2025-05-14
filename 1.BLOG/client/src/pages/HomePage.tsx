@@ -3,20 +3,16 @@ import {Bell, Bookmark, Home, Mail, Search, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 
 import {Input} from "@/components/ui/input.tsx";
-import {useEffect, useState} from "react";
-import {generateDummyPosts} from "@/lib/constants.ts";
+
 import {Post} from "@/types/post.ts";
 import PostCard from "@/components/PostCard.tsx";
 
 import NewPostForm from "@/components/forms/NewPostForm";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "@/lib/api";
 
 const HomePage = () => {
-    const [dummyPost, setPosts] = useState<Post[]>([]);
-
-    const queryClienyt = useQueryClient();
-    const {data:allPosts, isLoading, error} = useQuery({
+    const {data:allPosts} = useQuery({
         queryKey: ["posts"],
         queryFn: getPosts,
     })
@@ -24,10 +20,7 @@ const HomePage = () => {
     console.log("Data", allPosts);
 
 
-    // useEffect(() => {
-    //     const dummyPosts = generateDummyPosts(50);
-    //     setPosts(dummyPosts);
-    // }, []);
+
 
 
 

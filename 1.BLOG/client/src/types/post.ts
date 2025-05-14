@@ -7,14 +7,16 @@ export type Post = {
         profilePic:string
     };
     comments: {
+        id: string;
         user: {
             name: string;
+            profilePic:string;
         };
         text: string;
         createdAt: string;
     }[];
     likes: {
-        name: string;
+        _id: string;
     }[];
     image: string | null;
     createdAt: string;

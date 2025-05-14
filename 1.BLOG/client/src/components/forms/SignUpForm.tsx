@@ -6,7 +6,6 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -19,9 +18,8 @@ import {Shuffle} from "lucide-react";
 import useSignUp from "@/hooks/useSignUp.tsx";
 
 const SignUpForm = () => {
-    const [avatarUrl, setAvatarUrl] =useState("")
-    const {isPending,signUpMutation}= useSignUp()
-
+    const [avatarUrl, setAvatarUrl] = useState("")
+    const {isPending, signUpMutation} = useSignUp()
 
 
     const form = useForm<z.infer<typeof registerSchema>>({
@@ -36,9 +34,10 @@ const SignUpForm = () => {
     })
 
     function onSubmit(values: z.infer<typeof registerSchema>) {
-        const { confirmPassword, ...dataToSend } = values;
+        const {confirmPassword, ...dataToSend} = values;
         signUpMutation(dataToSend as SignupData);
     }
+
     useEffect(() => {
         const randomIdx = Math.floor(Math.random() * 100) + 1;
         const url = `https://avatar.iran.liara.run/public/${randomIdx}.png`;
@@ -57,7 +56,7 @@ const SignUpForm = () => {
                         <FormItem>
                             <div className="flex flex-col items-center space-y-4">
                                 <Avatar className="size-25">
-                                    <AvatarImage src={avatarUrl} />
+                                    <AvatarImage src={avatarUrl}/>
                                     <AvatarFallback>Loading...</AvatarFallback>
                                 </Avatar>
                                 <Button
@@ -70,69 +69,68 @@ const SignUpForm = () => {
                                         form.setValue("profilePic", newUrl);
                                     }}
                                 >
-                                    Change Avatar <Shuffle />
+                                    Change Avatar <Shuffle/>
                                 </Button>
                             </div>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Your name..." {...field} />
-                            </FormControl>
-                            <FormDescription className="text-md ">
-                                This is your public display name.
-                            </FormDescription>
                             <FormMessage/>
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input type="email" placeholder="johndoe@mail.com" {...field} />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input type="password" placeholder="●●●●●●●●●●" {...field} />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                                <Input type="password" placeholder="●●●●●●●●●●" {...field} />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
+                <div className="grid grid-cols-2 xl:grid-cols-1 gap-3">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Your name..." {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input type="email" placeholder="johndoe@mail.com" {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input type="password" placeholder="●●●●●●●●●●" {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Confirm Password</FormLabel>
+                                <FormControl>
+                                    <Input type="password" placeholder="●●●●●●●●●●" {...field} />
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
 
+                </div>
                 <Button variant={"elevated"} type="submit" className="w-full">
                     {isPending ? "Signing up..." : "Sign Up"}
                 </Button>
