@@ -81,7 +81,30 @@ export const getMyPosts = async (req, res) => {
 };
 
 export const getPostById = async (req, res) => {
-  //TODO: get post by id
+  const {postId} = req.params;
+    if (!postId) {
+        return res.status(400).json({
+        success: false,
+        message: "Post not found",
+        });
+    }
+    try{
+      const post = await Blog.findById(postId).
+      populate("author", "name profilePic").populate({
+        path: "comments.user",
+        select: "name profilePic -_id",
+      }).populate("likes", "_id")
+      return res.status(200).json({
+        success: true,
+        post
+      })
+    }catch(err){
+        console.log("Error in getPostById: ", err);
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
 };
 export const editPost = async (req, res) => {
   const { ...data } = req.body;

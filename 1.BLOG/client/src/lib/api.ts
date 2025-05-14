@@ -35,6 +35,11 @@ export const getPosts = async () => {
     const res = await axiosInstance.get("/post/get-posts");
     return res.data.posts;
 }
+export const getPostById  = async (postId: string)=>{
+    const res = await axiosInstance.get(`/post/${postId}`);
+    return res.data.post;
+}
+
 
 export const addComment = async ({postId, text}: {postId:string, text:string}) => {
     const res = await axiosInstance.put(`post/${postId}/add-comment`,{text})

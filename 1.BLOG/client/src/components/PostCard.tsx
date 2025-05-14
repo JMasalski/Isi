@@ -6,6 +6,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {addComment, toggleLike} from "@/lib/api";
 import UseAuthUser from "@/hooks/useAuthUser";
 import {Button} from "./ui/button";
+import toast from "react-hot-toast";
 
 
 interface Comment {
@@ -58,12 +59,16 @@ const PostCard = ({post}: PostCardProps) => {
     const {content, author, comments, likes, createdAt} = post;
     const {authUser} = UseAuthUser();
 
-    console.log("authUser._id:", authUser._id);
-    console.log("post.likes:", post.likes);
+    const handleCopy = async() => {
+        try {
+            await navigator.clipboard.writeText("http://localhost:5173/post/" + post._id);
+        }catch(e){
+            console.error("Failed to copy: ", e);
+        }
+    }
 
     const hasLiked = post.likes.some((like) => like._id.toString() === authUser._id);
-    console.log("hasLiked:", hasLiked);
-    console.log("hasLiked:", hasLiked);
+
 
     const queryClient = useQueryClient();
     const {mutate: addCommentMutation, isPending} = useMutation({
@@ -116,7 +121,7 @@ const PostCard = ({post}: PostCardProps) => {
                             <MessageCircle className="h-5 w-5"/>
                             <span>{comments.length}</span>
                         </button>
-                        <button className="flex items-center gap-1 hover:text-purple-500">
+                        <button onClick={handleCopy} className="flex items-center gap-1 hover:text-purple-500">
                             <Share className="h-5 w-5"/>
                         </button>
                     </div>

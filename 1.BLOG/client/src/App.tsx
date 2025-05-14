@@ -6,6 +6,7 @@ import AddPostPage from "./pages/AddPostPage"
 import ProfilePage from "./pages/ProfilePage"
 import {Toaster} from "react-hot-toast";
 import useAuthUser from "@/hooks/useAuthUser.tsx";
+import PostPage from "@/pages/PostPage.tsx";
 
 const App = () => {
     const { authUser, isLoading, isError } = useAuthUser();
@@ -39,6 +40,10 @@ const App = () => {
                 <Route
                     path="/create-post"
                     element={isAuthenticated ? <AddPostPage /> : <Navigate to="/signup" />}
+                />
+                <Route
+                    path="/post/:postId"
+                    element={isAuthenticated ? <PostPage/> : <Navigate to="/signup" />}
                 />
 
                 <Route

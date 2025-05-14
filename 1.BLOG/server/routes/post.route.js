@@ -17,8 +17,8 @@ postRouter.post('/create-post',protectRoute,createPost);
 postRouter.get('/get-posts', getPosts);
 //http://localhost:3000/api/v1/post/get-my-posts
 postRouter.get('/get-my-posts', protectRoute ,getMyPosts);
-//http://localhost:3000/api/v1/post/post/:id
-postRouter.get('/post/:id', getPostById);
+//http://localhost:3000/api/v1/post/:id
+postRouter.get('/:postId', getPostById);
 //http://localhost:3000/api/v1/post/edit-post/:id
 postRouter.put('/edit-post/:id', protectRoute, editPost);
 //http://localhost:3000/api/v1/post/delete-post
