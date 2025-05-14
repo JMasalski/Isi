@@ -22,4 +22,7 @@ export type Post = {
     createdAt: string;
 };
 
-export type PostFormData = Omit<Post, "_id" | "author" | "comments" | "likes" | "createdAt"> 
+export type PostFormData = {
+    content: string;
+    image: string | null;
+}
