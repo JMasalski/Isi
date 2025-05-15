@@ -59,10 +59,11 @@ const PostCard = ({post}: PostCardProps) => {
     const {content, author, comments, likes, createdAt} = post;
     const {authUser} = UseAuthUser();
 
-    const handleCopy = async() => {
+    const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText("http://localhost:5173/post/" + post._id);
-        }catch(e){
+            toast.success("Copied to clipboard!");
+        } catch (e) {
             console.error("Failed to copy: ", e);
         }
     }
@@ -84,7 +85,7 @@ const PostCard = ({post}: PostCardProps) => {
             queryClient.invalidateQueries({queryKey: ["posts"]});
         },
     })
-    console.log("Has liked",hasLiked);
+
 
     return (
         <div className="border-4 border-black rounded-xl p-4 hover:bg-yellow-50 transition-colors">
@@ -94,7 +95,7 @@ const PostCard = ({post}: PostCardProps) => {
                         src={post.author.profilePic || "/placeholder.svg"}
                         alt="@johndoe"
                     />
-                    <AvatarFallback className="bg-green-300">JD</AvatarFallback>
+                    <AvatarFallback className="bg-green-300">{post.author.name.slice(0,2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -105,20 +106,26 @@ const PostCard = ({post}: PostCardProps) => {
                         <span className="text-gray-500">· {createdAt.split("T")[0]}</span>
                     </div>
                     <p className="my-2">{content}</p>
+                    {post.image && (
+                        <img
+                            src={post.image}
+                            alt="Post image"
+                            className="w-1/2 h-auto border-2 self-center mx-auto rounded-lg my-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                            loading="lazy"
+                        />
+                    )}
                     <div className="flex justify-between">
                         <button
-                            className="flex items-center gap-1 hover:text-pink-500"
+                            className="flex  items-center gap-1 "
                             onClick={() => toggleLikeMutation({postId: post._id})}>
-                            <Heart className="h-5 w-5" fill={hasLiked? "#f6339a" : "none"} />
+                            <Heart className="h-5 w-5  hover:text-pink-500" fill={hasLiked ? "#f6339a" : "none"}/>
                             <span>{likes.length}</span>
                         </button>
                         <button
-                            className={`flex items-center gap-1 ${
-                                showComments ? "text-green-500" : "hover:text-green-500"
-                            }`}
+                            className="flex items-center gap-1"
                             onClick={() => setShowComments(!showComments)}
                         >
-                            <MessageCircle className="h-5 w-5"/>
+                            <MessageCircle className={`h-5 w-5 ${showComments ? "text-green-500" : "hover:text-green-500"}`} />
                             <span>{comments.length}</span>
                         </button>
                         <button onClick={handleCopy} className="flex items-center gap-1 hover:text-purple-500">

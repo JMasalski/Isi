@@ -83,7 +83,7 @@ const NewPostForm = () => {
                                             />
                                         </FormControl>
                                         <label htmlFor="fileInput">
-                                            <Image className="absolute right-3 top-2.5 h-5 w-5 text-gray-500"/>
+                                            <Image className="absolute right-3 top-2.5 h-5 w-5 text-gray-500 cursor-pointer"/>
                                         </label>
                                         <Input
                                             id="fileInput"
