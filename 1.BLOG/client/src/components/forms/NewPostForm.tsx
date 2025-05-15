@@ -61,7 +61,7 @@ const NewPostForm = () => {
     }
 
     return (
-        <div className="flex gap-3 mb-6">
+        <div className="flex  gap-3 mb-6">
             <Avatar className="border-2 border-black">
                 <AvatarImage src={authUser.profilePic} alt="@user"/>
                 <AvatarFallback className="bg-pink-300">ME</AvatarFallback>
@@ -79,7 +79,7 @@ const NewPostForm = () => {
                                             <Input
                                                 placeholder="What's happening?"
                                                 {...field}
-                                                className="border-4 border-black rounded-xl mb-2 p-4 text-lg focus-visible:ring-0 focus-visible:ring-offset-0"
+                                                className="border-4 border-black rounded-xl  p-4 text-lg focus-visible:ring-0 focus-visible:ring-offset-0"
                                             />
                                         </FormControl>
                                         <label htmlFor="fileInput">

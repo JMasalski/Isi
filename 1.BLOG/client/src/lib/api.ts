@@ -13,7 +13,7 @@ export const signin = async (loginData: LoginData)=>{
 }
 
 export const logout = async () =>{
-    const res = await axiosInstance.post("/auth/logout");
+    const res = await axiosInstance.post("/auth/sign-out");
     return res.data;
 }
 

@@ -1,28 +1,22 @@
 import {Link} from "react-router";
-import {Bell, Bookmark, Home, Mail, Search, User} from "lucide-react";
+import { Heart, Home, LogOut, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 
-import {Input} from "@/components/ui/input.tsx";
 
 import {Post} from "@/types/post.ts";
 import PostCard from "@/components/PostCard.tsx";
 
 import NewPostForm from "@/components/forms/NewPostForm";
 import { useQuery } from "@tanstack/react-query";
-import { getPosts } from "@/lib/api";
+import {getPosts} from "@/lib/api";
+import useLogOut from "@/hooks/useLogOut.tsx";
 
 const HomePage = () => {
     const {data:allPosts} = useQuery({
         queryKey: ["posts"],
         queryFn: getPosts,
     })
-    
-    console.log("Data", allPosts);
-
-
-
-
-
+    const {logoutMutation} = useLogOut()
 
     return (
         <div className="min-h-screen bg-yellow-50">
@@ -30,7 +24,7 @@ const HomePage = () => {
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 p-4">
                 {/* Left sidebar */}
                 {/* //TODO: MAKE IT RESPONSIVE AND STICKY  */}
-                <div className="md:col-span-3">
+                <div className="md:col-span-3 sticky top-3 self-start">
                     <div
                         className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                         <div className="flex flex-col gap-6">
@@ -43,37 +37,31 @@ const HomePage = () => {
                                     to="/"
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
-                                    <Home className="h-6 w-6"/>
+                                    <Home className="size-6"/>
                                     Home
                                 </Link>
                                 <Link
                                     to="/profile"
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
-                                    <User className="h-6 w-6"/>
+                                    <User className="size-6"/>
                                     Profile
                                 </Link>
                                 <Link
                                     to="#"
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
-                                    <Bell className="h-6 w-6"/>
-                                    Notifications
+                                    <Heart className="size-6"/>
+                                    Liked Posts
                                 </Link>
-                                <Link
-                                    to="#"
-                                    className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
+                                <button
+                                    onClick={logoutMutation}
+                                    className="cursor-pointer flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors w-full"
+
                                 >
-                                    <Mail className="h-6 w-6"/>
-                                    Messages
-                                </Link>
-                                <Link
-                                    to="#"
-                                    className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
-                                >
-                                    <Bookmark className="h-6 w-6"/>
-                                    Bookmarks
-                                </Link>
+                                    <LogOut className="size-6"/>
+                                    Logout
+                                </button>
                             </nav>
 
                             <Button variant={"elevated"}
@@ -84,7 +72,7 @@ const HomePage = () => {
                     </div>
                 </div>
                 {/* Main content */}
-                <div className="md:col-span-6">
+                <div className="md:col-span-9">
                     <div
                         className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
                         <h1 className="text-2xl font-black mb-4">Home</h1>
@@ -95,40 +83,6 @@ const HomePage = () => {
                             {/* Post 1 */}
                             {allPosts?.map((post:Post) => <PostCard key={post._id} post={post}/>)}
                             {/* Right sidebar */}
-                        </div>
-                    </div>
-                </div>
-                <div className="md:col-span-3">
-                    <div
-                        className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-500"/>
-                            <Input
-                                placeholder="Search"
-                                className="pl-10 border-4 border-black rounded-xl p-2 focus-visible:ring-0 focus-visible:ring-offset-0"
-                            />
-                        </div>
-                    </div>
-
-                    <div
-                        className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                        <h2 className="text-xl font-black mb-4">Trending</h2>
-                        <div className="space-y-4">
-                            <div className="hover:bg-pink-100 p-2 rounded-lg transition-colors">
-                                <p className="text-gray-500 text-sm">Trending in Design</p>
-                                <p className="font-bold">#Neobrutalism</p>
-                                <p className="text-gray-500 text-sm">5,243 posts</p>
-                            </div>
-                            <div className="hover:bg-pink-100 p-2 rounded-lg transition-colors">
-                                <p className="text-gray-500 text-sm">Trending in Tech</p>
-                                <p className="font-bold">#WebDesign</p>
-                                <p className="text-gray-500 text-sm">3,128 posts</p>
-                            </div>
-                            <div className="hover:bg-pink-100 p-2 rounded-lg transition-colors">
-                                <p className="text-gray-500 text-sm">Trending in Development</p>
-                                <p className="font-bold">#ReactJS</p>
-                                <p className="text-gray-500 text-sm">2,854 posts</p>
-                            </div>
                         </div>
                     </div>
                 </div>
