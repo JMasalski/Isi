@@ -27,6 +27,11 @@ export const getAuthUser = async () => {
     }
 }
 
+export const getUserProfile = async (username: string) => {
+    const res = await axiosInstance.get(`/user/${username}/get-user`)
+    return res.data
+}
+
 export const createPost = async (postData: PostFormData) => {
     const res = await axiosInstance.post("/post/create-post", postData);
     return res.data;

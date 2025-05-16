@@ -7,6 +7,7 @@ import {addComment, toggleLike} from "@/lib/api";
 import UseAuthUser from "@/hooks/useAuthUser";
 import {Button} from "./ui/button";
 import toast from "react-hot-toast";
+import {Link} from "react-router";
 
 
 interface Comment {
@@ -90,20 +91,26 @@ const PostCard = ({post}: PostCardProps) => {
     return (
         <div className="border-4 border-black rounded-xl p-4 hover:bg-yellow-50 transition-colors">
             <div className="flex gap-3">
-                <Avatar className="border-2 border-black">
-                    <AvatarImage
-                        src={post.author.profilePic || "/placeholder.svg"}
-                        alt="@johndoe"
-                    />
-                    <AvatarFallback className="bg-green-300">{post.author.name.slice(0,2).toUpperCase()}</AvatarFallback>
-                </Avatar>
+                <Link to={`/profile/${post.author.name}`}>
+                    <Avatar className="border-2 border-black">
+                        <AvatarImage
+                            src={post.author.profilePic || "/placeholder.svg"}
+                            alt="@johndoe"
+                        />
+                        <AvatarFallback
+                            className="bg-green-300">{post.author.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                </Link>
                 <div className="flex-1">
                     <div className="flex items-center gap-2">
-                        <span className="font-bold">{author.name}</span>
-                        <span className="text-gray-500">
-              @{author.name.replace(/\s+/g, "").toLowerCase()}
-            </span>
-                        <span className="text-gray-500">· {createdAt.split("T")[0]}</span>
+                        <Link to={`/profile/${post.author.name}`}>
+                            <span className="font-bold">{author.name} </span>
+                            <span className="text-gray-500">
+                            @{author.name.replace(/\s+/g, "").toLowerCase()}
+                        </span>
+                        </Link>
+                        <span className="text-gray-500">· {createdAt.split("T")[0]}
+                        </span>
                     </div>
                     <p className="my-2">{content}</p>
                     {post.image && (
@@ -125,7 +132,8 @@ const PostCard = ({post}: PostCardProps) => {
                             className="flex items-center gap-1"
                             onClick={() => setShowComments(!showComments)}
                         >
-                            <MessageCircle className={`h-5 w-5 ${showComments ? "text-green-500" : "hover:text-green-500"}`} />
+                            <MessageCircle
+                                className={`h-5 w-5 ${showComments ? "text-green-500" : "hover:text-green-500"}`}/>
                             <span>{comments.length}</span>
                         </button>
                         <button onClick={handleCopy} className="flex items-center gap-1 hover:text-purple-500">

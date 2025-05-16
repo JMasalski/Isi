@@ -8,6 +8,7 @@ import {Toaster} from "react-hot-toast";
 import useAuthUser from "@/hooks/useAuthUser.tsx";
 import PostPage from "@/pages/PostPage.tsx";
 
+
 const App = () => {
     const { authUser, isLoading, isError } = useAuthUser();
 
@@ -32,8 +33,8 @@ const App = () => {
         <div className="h-screen bg-[#daf5f0]">
             <Routes>
                 <Route path="/" element={isAuthenticated ? <HomePage/> : <Navigate to="/signup" />} />
-                <Route path="/login" element={isAuthenticated ?<HomePage/> :<LoginPage />} />
-                <Route path="/signup" element={isAuthenticated ?<HomePage/> :<SignUpPage />} />
+                <Route path="/login" element={!isAuthenticated ?<LoginPage/> :<Navigate to="/"/>} />
+                <Route path="/signup" element={!isAuthenticated ?<SignUpPage/> :<Navigate to="/"/>} />
 
                 {/* Jeśli użytkownik jest zalogowany, dostęp do podstrony */}
                 <Route path="/" element={isAuthenticated ? <HomePage/> : <Navigate to="/signup" />} />

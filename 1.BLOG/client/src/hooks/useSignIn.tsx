@@ -8,8 +8,9 @@ const UseSignIn = () => {
     const {mutate, isPending, error} = useMutation({
         mutationFn: signin,
         onSuccess: () =>queryClient.invalidateQueries({queryKey: ["authUser"]}),
-        onError: () => {
-            toast.error("Something went wrong")
+        onError: (error) => {
+            // @ts-ignore
+            toast.error(error.response.data.message);
         }
     })
     return {isPending, error, signInMutation: mutate}

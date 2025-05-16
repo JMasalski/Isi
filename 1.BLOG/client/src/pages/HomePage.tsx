@@ -10,6 +10,7 @@ import NewPostForm from "@/components/forms/NewPostForm";
 import { useQuery } from "@tanstack/react-query";
 import {getPosts} from "@/lib/api";
 import useLogOut from "@/hooks/useLogOut.tsx";
+import useAuthUser from "@/hooks/useAuthUser.tsx";
 
 const HomePage = () => {
     const {data:allPosts} = useQuery({
@@ -17,6 +18,9 @@ const HomePage = () => {
         queryFn: getPosts,
     })
     const {logoutMutation} = useLogOut()
+    const {authUser}= useAuthUser()
+    console.log(authUser.name)
+
 
     return (
         <div className="min-h-screen bg-yellow-50">
@@ -41,7 +45,7 @@ const HomePage = () => {
                                     Home
                                 </Link>
                                 <Link
-                                    to="/profile"
+                                    to={`/profile/${authUser.name}`}
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
                                     <User className="size-6"/>

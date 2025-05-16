@@ -6,7 +6,7 @@ import {getPostById} from "@/lib/api.ts";
 const PostPage = () => {
     const {postId} = useParams();
 
-    const { data, isLoading, isError, error } = useQuery({
+    const { data } = useQuery({
         queryKey: ['post', postId],
         queryFn: () => getPostById(postId!), // ✅ przekazujesz funkcję, a nie wynik
         enabled: !!postId, // ⛑️ zabezpieczenie jeśli postId jest undefined

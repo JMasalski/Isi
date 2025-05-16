@@ -5,6 +5,7 @@ import cors from 'cors';
 import connectDB from "./lib/db.js";
 import authRouter from "./routes/auth.route.js";
 import postRouter from "./routes/post.route.js";
+import userRoute from "./routes/user.route.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/post', postRouter);
+app.use('/api/v1/user', userRoute);
 
 
 app.listen(PORT, () =>{
