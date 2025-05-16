@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import UseAuthUser from "@/hooks/useAuthUser";
 import {Image, X} from "lucide-react";
 import {PostFormData} from "@/types/post.ts";
-import {useState} from "react";
+import {useState, useRef} from "react";
 
 const NewPostForm = () => {
 
@@ -30,6 +30,7 @@ const NewPostForm = () => {
         }
     });
     const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const form = useForm<z.infer<typeof postSchema>>({
         resolver: zodResolver(postSchema),
@@ -57,11 +58,8 @@ const NewPostForm = () => {
     console.log("Form errors:", form.formState.errors);
 
     function onSubmit(values: z.infer<typeof postSchema>) {
-        //mutate(values as PostFormData);
-        console.log("Form errors:", form.formState.errors);
-        console.log("✅ Formularz przeszedł walidację");
-        console.log(values); // <- Tutaj zobaczysz content i base64 image
         mutate(values as PostFormData);
+        setImage(null)
     }
 
     return (
@@ -91,6 +89,7 @@ const NewPostForm = () => {
                                                 className="absolute right-3 top-2.5 h-5 w-5 text-gray-500 cursor-pointer"/>
                                         </label>
                                         <Input
+                                            ref={fileInputRef}
                                             id="fileInput"
                                             type="file"
                                             accept="image/*"
@@ -116,25 +115,31 @@ const NewPostForm = () => {
                     <div className="flex justify-center mt-4">
                         <div className="relative inline-block">
                             <img
-                                src={image as string || "/placeholder.svg"}
+                                src={(image as string) || "/placeholder.svg"}
                                 alt="Preview"
                                 className="max-h-64 object-contain border-2 border-pink-300 rounded-xl shadow-[4px_4px_0px_rgba(253,165,213,1)]"
                             />
                             <Button
                                 variant={"elevated"}
-                                onClick={() => setImage(null)}
+                                onClick={() => {
+                                    setImage(null);
+                                    form.setValue("image", "");
+                                    if (fileInputRef.current) {
+                                        fileInputRef.current.value = "";
+                                    }
+
+                                }}
                                 className="absolute -top-2 -right-2 bg-red-500 rounded-full size-8"
                                 aria-label="Remove image"
                             >
-                                <X className="h-5 w-5 text-white" />
+                                <X className="h-5 w-5 text-white"/>
                             </Button>
                         </div>
                     </div>
                 )}
-
             </div>
         </div>
     );
-};
+}
 
 export default NewPostForm;
