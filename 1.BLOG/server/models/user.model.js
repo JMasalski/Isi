@@ -21,7 +21,24 @@ const userSchema = new mongoose.Schema({
     profilePic:{
         type:String,
         default: "",
-    }
+    },
+    bio:{
+        type:String,
+        default: "",
+    },
+    city:{
+        type:String,
+        default: "",
+    },
+    linkBio:{
+        type:String,
+        default: "",
+    },
+    backgroundPic:{
+        type:String,
+        default: "",
+    },
+
 }, { timestamps: true })
 
 export const User = mongoose.model('User', userSchema)

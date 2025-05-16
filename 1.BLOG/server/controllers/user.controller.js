@@ -38,3 +38,23 @@ export const getUserByProfile = async (req,res) =>{
         })
     }
 }
+
+export const updatedProfile = async(req,res) =>{
+    try {
+        const {...data} = req.body;
+        const user = await User.findByIdAndUpdate(req.user.id, {
+            ...data
+        }, {new: true}).select("-password");
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        }
+        res.status(200).json({
+            success: true,
+            user
+        })
+
+    } catch (e) {
+        console.log("Error in update user route", e);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
