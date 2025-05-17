@@ -5,6 +5,9 @@ import {Button} from "@/components/ui/button.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {getUserProfile} from "@/lib/api.ts";
 import UseAuthUser from "@/hooks/useAuthUser.tsx";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
+import PostCard from "@/components/PostCard.tsx";
+import {Post} from "@/types/post.ts";
 
 
 interface UserProfile {
@@ -16,18 +19,19 @@ interface UserProfile {
         profilePic: string;
         createdAt: string;
         updatedAt: string;
-        bio:string;
-        city:string;
-        linkBio:string;
-        backgroundPic:string;
+        bio: string;
+        city: string;
+        linkBio: string;
+        backgroundPic: string;
     };
     posts: {
         _id: string;
         content: string;
         createdAt: string;
-        updatedAt: string;
-        likes: Array<string>
+        likes: Array<string>;
+        image: string | null;
         comments: {
+            id: string;
             text: string;
             createdAt: string;
             user: {
@@ -52,18 +56,27 @@ const ProfilePage = () => {
         return <div>Loading...</div>;
     }
     console.log("userProfile", userProfile)
-    const {user,posts} = userProfile;
+    const {user, posts} = userProfile;
     const isOwner = user._id === authUser._id
     const joinDate = new Date(user.createdAt);
+    console.log(posts)
+    const fullPosts: Post[] = posts.map((post) => ({
+        ...post,
+        author: {
+            _id: user._id,
+            name: user.name,
+            profilePic: user.profilePic,
+        }
+    }));
 
-
+    console.log("Full posts",fullPosts)
 
 
     return (
         <div className="min-h-screen bg-yellow-50 flex flex-col w-full p-2 md:p-4 lg:p-10">
             {/*Okno z profilem użytkownika*/}
-            <div className="flex flex-col   w-full">
-                <div className="bg-white rounded-xl border-4">
+            <div className="flex flex-col gap-y-4  w-full">
+                <div className="bg-white rounded-xl border-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <Link to={'/'} className="flex items-center gap-2 p-4">
                         <ArrowLeftIcon size={15}/>
                         <p className="text-lg font-bold ">
@@ -71,7 +84,8 @@ const ProfilePage = () => {
                         </p>
                     </Link>
                     <div className="h-64 border-y-4 border-black">
-                        <img src={user.backgroundPic} alt="Cover" loading="lazy" className="w-full h-full object-cover"/>
+                        <img src={user.backgroundPic} alt="Cover" loading="lazy"
+                             className="w-full h-full object-cover"/>
                     </div>
                     <div className="p-6">
                         <div className="flex justify-between">
@@ -119,6 +133,34 @@ const ProfilePage = () => {
                         </div>
 
                     </div>
+                </div>
+                {/*Tabs here*/}
+                <div className="bg-white border-2 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <Tabs defaultValue="account" className="w-full ">
+                        <TabsList
+                            className="w-full p-3 md:p-6 grid grid-cols-3 border-b-4 border-black rounded-none bg-transparent h-auto">
+                            <TabsTrigger value="posts"
+                                         className="data-[state=active]:shadow-[4px_4px_0px_0px_rgba(253,165,213,1)]
+                                         rounded-md py-4 font-bold text-lg">
+                                Posts
+                            </TabsTrigger>
+                            <TabsTrigger value="media"
+                                         className="data-[state=active]:shadow-[4px_4px_0px_0px_rgba(253,165,213,1)]
+                                         rounded-md py-4 font-bold text-lg">
+                                Media
+                            </TabsTrigger>
+                            <TabsTrigger value="liked"
+                                         className="data-[state=active]:shadow-[4px_4px_0px_0px_rgba(253,165,213,1)]
+                                         rounded-md py-4 font-bold text-lg">
+                                Liked
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="posts">{fullPosts.map((post)=>(
+                            <PostCard key={post._id} post={post}/>
+                        ))}</TabsContent>
+                        <TabsContent value="media">Change your password here.</TabsContent>
+                        <TabsContent value="liked">liked</TabsContent>
+                    </Tabs>
                 </div>
             </div>
         </div>

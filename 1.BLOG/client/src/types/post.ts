@@ -15,9 +15,7 @@ export type Post = {
         text: string;
         createdAt: string;
     }[];
-    likes: {
-        _id: string;
-    }[];
+    likes: Array<string>;
     image: string | null;
     createdAt: string;
 };

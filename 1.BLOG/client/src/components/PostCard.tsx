@@ -69,7 +69,7 @@ const PostCard = ({post}: PostCardProps) => {
         }
     }
 
-    const hasLiked = post.likes.some((like) => like._id.toString() === authUser._id);
+    const hasLiked = post.likes.some((likeId) => likeId === authUser._id);
 
 
     const queryClient = useQueryClient();
