@@ -15,7 +15,7 @@ export type Post = {
         text: string;
         createdAt: string;
     }[];
-    likes: Array<string>;
+    likes: {_id:string}[];
     image: string | null;
     createdAt: string;
 };
@@ -23,4 +23,17 @@ export type Post = {
 export type PostFormData = {
     content: string;
     image: string | null;
+}
+
+export type User = {
+    _id:string;
+    name:string;
+    email:string;
+    profilePic:string;
+    createdAt:string;
+    updatedAt:string;
+    bio:string | null;
+    city:string | null;
+    linkBio:string | undefined;
+    backgroundPic:string | null;
 }

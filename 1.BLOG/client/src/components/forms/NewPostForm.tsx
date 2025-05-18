@@ -11,7 +11,7 @@ import {Form, FormControl, FormField, FormItem} from "../ui/form";
 import toast from "react-hot-toast";
 import UseAuthUser from "@/hooks/useAuthUser";
 import {Image, X} from "lucide-react";
-import {PostFormData} from "@/types/post.ts";
+import {PostFormData} from "@/types/types.ts";
 import {useState, useRef} from "react";
 
 const NewPostForm = () => {
@@ -21,7 +21,7 @@ const NewPostForm = () => {
     const {mutate, isPending} = useMutation({
         mutationFn: createPost,
         onSuccess: (data) => {
-            console.log("Post created successfully", data);
+            console.log("Types created successfully", data);
             queryClient.invalidateQueries({queryKey: ["posts"]});
 
         },
@@ -106,7 +106,7 @@ const NewPostForm = () => {
                                 type="submit"
                                 className="bg-cyan-400 hover:bg-cyan-500 text-black font-bold rounded-xl"
                             >
-                                {isPending ? "Posting..." : "Post"}
+                                {isPending ? "Posting..." : "Types"}
                             </Button>
                         </div>
                     </form>

@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axios.ts";
 import {LoginData, SignupData} from "@/lib/formSchemas.ts";
-import { PostFormData } from "@/types/post";
+import { PostFormData } from "@/types/types.ts";
 
 export const signup = async (signupData: SignupData)=>{
     const res = await axiosInstance.post("/auth/sign-up", signupData);

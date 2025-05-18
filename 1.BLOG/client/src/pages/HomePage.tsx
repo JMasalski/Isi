@@ -3,7 +3,7 @@ import { Heart, Home, LogOut, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 
 
-import {Post} from "@/types/post.ts";
+import {Post} from "@/types/types.ts";
 import PostCard from "@/components/PostCard.tsx";
 
 import NewPostForm from "@/components/forms/NewPostForm";
@@ -19,7 +19,7 @@ const HomePage = () => {
     })
     const {logoutMutation} = useLogOut()
     const {authUser}= useAuthUser()
-    console.log(authUser.name)
+    console.log(allPosts)
 
 
     return (
@@ -80,13 +80,9 @@ const HomePage = () => {
                     <div
                         className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
                         <h1 className="text-2xl font-black mb-4">Home</h1>
-                        {/* Post creation */}
                             <NewPostForm/>
-                        {/* Feed */}
                         <div className="space-y-6">
-                            {/* Post 1 */}
                             {allPosts?.map((post:Post) => <PostCard key={post._id} post={post}/>)}
-                            {/* Right sidebar */}
                         </div>
                     </div>
                 </div>

@@ -5,30 +5,29 @@ import {
     deleteComment,
     deletePost,
     editComment, editPost,
-    getMyPosts, getPostById, getPosts,
+    getPostById, getPosts,
     toggleLike
 } from "../controllers/blog.controller.js";
 
 const postRouter = Router();
 
 //http://localhost:3000/api/v1/post/create-post
-postRouter.post('/create-post',protectRoute,createPost);
+postRouter.post('/create-post', protectRoute, createPost);
 //http://localhost:3000/api/v1/post/get-posts
 postRouter.get('/get-posts', getPosts);
-//http://localhost:3000/api/v1/post/get-my-posts
-postRouter.get('/get-my-posts', protectRoute ,getMyPosts);
+
 //http://localhost:3000/api/v1/post/:id
 postRouter.get('/:postId', getPostById);
 //http://localhost:3000/api/v1/post/edit-post/:id
 postRouter.put('/edit-post/:id', protectRoute, editPost);
 //http://localhost:3000/api/v1/post/delete-post
-postRouter.delete('/delete-post/:id',protectRoute,deletePost);
+postRouter.delete('/delete-post/:id', protectRoute, deletePost);
 
 
 //http://localhost:3000/api/v1/post/toggle-like
-postRouter.put('/:postId/toggle-like',protectRoute,toggleLike);
+postRouter.put('/:postId/toggle-like', protectRoute, toggleLike);
 //http://localhost:3000/api/v1/post/add-comment
-postRouter.put('/:postId/add-comment', protectRoute,addComment);
+postRouter.put('/:postId/add-comment', protectRoute, addComment);
 //http://localhost:3000/api/v1/post/edit-comment
 postRouter.put('/edit-comment/', protectRoute, editComment)
 //http://localhost:3000/api/v1/post/delete-comment

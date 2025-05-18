@@ -20,6 +20,7 @@ export const getUserByProfile = async (req,res) =>{
                 path: 'comments.user',
                 select: 'name profilePic -_id',
             })
+            .populate('likes', '_id') // Dodaj tę linię
             .lean();
 
 

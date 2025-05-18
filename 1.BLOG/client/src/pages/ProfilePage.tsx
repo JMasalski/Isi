@@ -7,45 +7,18 @@ import {getUserProfile} from "@/lib/api.ts";
 import UseAuthUser from "@/hooks/useAuthUser.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import PostCard from "@/components/PostCard.tsx";
-import {Post} from "@/types/post.ts";
+import {Post, User} from "@/types/types.ts";
 
 
 interface UserProfile {
-    success: boolean;
-    user: {
-        _id: string;
-        name: string;
-        email: string;
-        profilePic: string;
-        createdAt: string;
-        updatedAt: string;
-        bio: string;
-        city: string;
-        linkBio: string;
-        backgroundPic: string;
-    };
-    posts: {
-        _id: string;
-        content: string;
-        createdAt: string;
-        likes: Array<string>;
-        image: string | null;
-        comments: {
-            id: string;
-            text: string;
-            createdAt: string;
-            user: {
-                name: string;
-                profilePic: string;
-            };
-        }[];
-    }[];
+    user: User;
+    posts:Post[]
 }
 
 const ProfilePage = () => {
     const {username} = useParams()
-
     const {authUser} = UseAuthUser()
+
 
     const {data: userProfile} = useQuery<UserProfile>({
         queryKey: ['userProfile', username],
@@ -55,10 +28,10 @@ const ProfilePage = () => {
     if (!userProfile) {
         return <div>Loading...</div>;
     }
-    console.log("userProfile", userProfile)
     const {user, posts} = userProfile;
     const isOwner = user._id === authUser._id
     const joinDate = new Date(user.createdAt);
+
     console.log(posts)
     const fullPosts: Post[] = posts.map((post) => ({
         ...post,
@@ -84,7 +57,7 @@ const ProfilePage = () => {
                         </p>
                     </Link>
                     <div className="h-64 border-y-4 border-black">
-                        <img src={user.backgroundPic} alt="Cover" loading="lazy"
+                        <img src={user.backgroundPic|| ""} alt="Cover" loading="lazy"
                              className="w-full h-full object-cover"/>
                     </div>
                     <div className="p-6">
@@ -117,7 +90,7 @@ const ProfilePage = () => {
                                 </p>
                                 <p className="flex items-center text-sm text-gray-500 gap-1">
                                     <LinkIcon size={20}/>
-                                    <a href={user.linkBio} target="_blank" rel="noopener noreferrer">
+                                    <a href={user.linkBio || "#"} target="_blank" rel="noopener noreferrer">
                                         {user.linkBio}
                                     </a>
                                 </p>
@@ -155,8 +128,8 @@ const ProfilePage = () => {
                                 Liked
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="posts">{fullPosts.map((post)=>(
-                            <PostCard key={post._id} post={post}/>
+                        <TabsContent value="posts" className="p-5 md:p-10 space-y-5">{fullPosts.map((post)=>(
+                            <PostCard key={post._id} post={post} username={username}/>
                         ))}</TabsContent>
                         <TabsContent value="media">Change your password here.</TabsContent>
                         <TabsContent value="liked">liked</TabsContent>

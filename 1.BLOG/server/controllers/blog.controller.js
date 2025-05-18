@@ -70,22 +70,14 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-export const getMyPosts = async (req, res) => {
-  const id = req.user.id;
-  const posts = await Blog.find({ author: id }).sort({ createdAt: -1 });
 
-  res.status(200).json({
-    success: true,
-    posts,
-  });
-};
 
 export const getPostById = async (req, res) => {
   const {postId} = req.params;
     if (!postId) {
         return res.status(400).json({
         success: false,
-        message: "Post not found",
+        message: "Types not found",
         });
     }
     try{
@@ -106,6 +98,7 @@ export const getPostById = async (req, res) => {
         });
     }
 };
+
 export const editPost = async (req, res) => {
   const { ...data } = req.body;
   const postID = req.params.id;
@@ -113,7 +106,7 @@ export const editPost = async (req, res) => {
   if (!postID) {
     return res.status(400).json({
       success: false,
-      message: "Post not found",
+      message: "Types not found",
     });
   }
 
@@ -130,7 +123,7 @@ export const editPost = async (req, res) => {
     if (!updatedPost) {
       return res.status(404).json({
         success: false,
-        message: "Post not found or not authorized",
+        message: "Types not found or not authorized",
       });
     }
     res.status(200).json({
@@ -152,7 +145,7 @@ export const deletePost = async (req, res) => {
   if (!postID) {
     return res.status(400).json({
       success: false,
-      message: "Post not found",
+      message: "Types not found",
     });
   }
   try {
@@ -163,12 +156,12 @@ export const deletePost = async (req, res) => {
     if (!deletedPost) {
       return res.status(404).json({
         success: false,
-        message: "Post not found or not authorized",
+        message: "Types not found or not authorized",
       });
     }
     res.status(200).json({
       success: true,
-      message: "Post deleted successfully",
+      message: "Types deleted successfully",
     });
   } catch (err) {
     console.log("Error in deletePost: ", err);
@@ -186,7 +179,7 @@ export const toggleLike = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: "Post not found",
+        message: "Types not found",
       });
     }
     const userId = req.user.id;
@@ -201,7 +194,7 @@ export const toggleLike = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: hasLiked ? "Post unliked" : "Post liked",
+      message: hasLiked ? "Types unliked" : "Types liked",
       liked: !hasLiked,
       likesCount: post.likes.length,
     });
@@ -222,7 +215,7 @@ export const addComment = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: "Post not found",
+        message: "Types not found",
       });
     }
     const userId = req.user.id;
@@ -257,7 +250,7 @@ export const editComment = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: "Post not found",
+        message: "Types not found",
       });
     }
 
@@ -305,7 +298,7 @@ export const deleteComment = async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        message: "Post not found",
+        message: "Types not found",
       });
     }
 
