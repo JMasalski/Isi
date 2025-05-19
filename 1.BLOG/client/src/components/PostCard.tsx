@@ -1,13 +1,21 @@
 import {useState} from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Heart, MessageCircle, Share, X} from "lucide-react";
+import {Heart, MessageCircle, Share, Trash, X} from "lucide-react";
 import {Post} from "@/types/types.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {addComment, toggleLike} from "@/lib/api";
+import {addComment, deletePost, toggleLike} from "@/lib/api";
 import UseAuthUser from "@/hooks/useAuthUser";
 import {Button} from "./ui/button";
 import toast from "react-hot-toast";
 import {Link} from "react-router";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription, DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
 
 
 interface Comment {
@@ -22,8 +30,9 @@ interface Comment {
 
 interface PostCardProps {
     post: Post;
-    username?:string
+    username?: string
 }
+
 
 const Comment = ({comment}: { comment: Comment }) => {
     return (
@@ -55,11 +64,13 @@ const Comment = ({comment}: { comment: Comment }) => {
     );
 };
 
-const PostCard = ({post,username}: PostCardProps) => {
+const PostCard = ({post, username}: PostCardProps) => {
     const [showComments, setShowComments] = useState(false);
     const [commentText, setCommentText] = useState("");
     const {content, author, comments, likes, createdAt} = post;
     const {authUser} = UseAuthUser();
+
+    const isOwner = post.author._id === authUser._id
 
     const handleCopy = async () => {
         try {
@@ -69,6 +80,7 @@ const PostCard = ({post,username}: PostCardProps) => {
             console.error("Failed to copy: ", e);
         }
     }
+
 
     const hasLiked = post.likes.some((like) => like._id === authUser._id);
 
@@ -91,6 +103,16 @@ const PostCard = ({post,username}: PostCardProps) => {
         },
     })
 
+    const {mutate: deltePostMutation, data: deleteData} = useMutation({
+        mutationFn: deletePost,
+        onSuccess: (deleteData) => {
+            toast.success(deleteData.message)
+            queryClient.invalidateQueries({queryKey: ["posts"]});
+            if (username) {
+                queryClient.invalidateQueries({queryKey: ['userProfile', username]});
+            }
+        }
+    })
 
 
     return (
@@ -108,12 +130,48 @@ const PostCard = ({post,username}: PostCardProps) => {
                 </Link>
 
                 <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                        <span className="font-bold">{author.name} </span>
-                        <span className="text-gray-500">
+                    <div className="flex justify-between gap-2">
+                        <div>
+                            <span className="font-bold">{author.name} </span>
+                            <span className="text-gray-500">
                                                     @{author.name.replace(/\s+/g, "").toLowerCase()}
                                                 </span>
-                        <span className="text-gray-500">· {createdAt.split("T")[0]}</span>
+                            <span className="text-gray-500">· {createdAt.split("T")[0]}</span>
+                        </div>
+                        {isOwner && (
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="elevated" className="bg-[#d1503b] text-white size-8 hover:bg-[#b1503b]">
+                                        <Trash className=""/>
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                        <DialogDescription>
+                                            This action cannot be undone. This will permanently delete your post
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter>
+                                        <Button
+                                            variant="elevated"
+                                            className="bg-[#d1503b] text-white  hover:bg-[#b1503b]"
+                                            onClick={() => {
+                                                deltePostMutation( post._id);
+                                            }}
+                                        >
+                                            Delete
+                                        </Button>
+                                        <DialogTrigger>
+                                            <Button variant="elevated" className="bg-green-400 text-white  hover:bg-green-500">
+                                                Cancel
+                                            </Button>
+                                        </DialogTrigger>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+
+                        )}
                     </div>
 
                     <p className="my-2">{content}</p>
@@ -179,13 +237,13 @@ const PostCard = ({post,username}: PostCardProps) => {
                                     <AvatarFallback className="bg-pink-300">ME</AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
-                                                            <textarea
-                                                                value={commentText}
-                                                                onChange={(e) => setCommentText(e.target.value)}
-                                                                className="w-full p-2 border-4 border-black rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
-                                                                placeholder="Write a comment..."
-                                                                rows={2}
-                                                            />
+                                    <textarea
+                                        value={commentText}
+                                        onChange={(e) => setCommentText(e.target.value)}
+                                        className="w-full p-2 border-4 border-black rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        placeholder="Write a comment..."
+                                        rows={2}
+                                    />
                                     <Button
                                         onClick={() => {
                                             addCommentMutation({text: commentText, postId: post._id});

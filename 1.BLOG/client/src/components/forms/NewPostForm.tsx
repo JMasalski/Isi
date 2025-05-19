@@ -20,9 +20,13 @@ const NewPostForm = () => {
     const queryClient = useQueryClient()
     const {mutate, isPending} = useMutation({
         mutationFn: createPost,
-        onSuccess: (data) => {
-            console.log("Types created successfully", data);
+        onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["posts"]});
+            setImage(null);
+            form.setValue("image", "");
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
 
         },
         onError: () => {
@@ -106,7 +110,7 @@ const NewPostForm = () => {
                                 type="submit"
                                 className="bg-cyan-400 hover:bg-cyan-500 text-black font-bold rounded-xl"
                             >
-                                {isPending ? "Posting..." : "Types"}
+                                {isPending ? "Posting..." : "Post"}
                             </Button>
                         </div>
                     </form>

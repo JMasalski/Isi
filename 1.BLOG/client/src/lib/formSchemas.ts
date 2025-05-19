@@ -23,3 +23,11 @@ export const postSchema = z.object({
 
 export type SignupData = Omit<z.infer<typeof registerSchema>, "confirmPassword">;
 export type LoginData = z.infer<typeof loginSchema>;
+
+export const editProfileSchema = z.object({
+    name: z.string().min(3, "Name must be at least 3 characters long"),
+    bio: z.string().max(100, "Bio must be at most 100 characters long").optional(),
+    city: z.string().max(50, "City must be at most 50 characters long").optional(),
+    linkBio: z.string().url().optional(),
+    backgroundPic: z.string()
+})

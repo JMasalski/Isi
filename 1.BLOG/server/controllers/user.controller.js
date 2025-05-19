@@ -56,6 +56,12 @@ export const updatedProfile = async(req,res) =>{
 
     } catch (e) {
         console.log("Error in update user route", e);
+        if (e.code === 11000 && e.keyPattern?.name) {
+            return res
+                .status(400)
+                .json({ message: "This username is already taken." });
+        }
+
         return res.status(500).json({message: "Internal server error"});
     }
 }

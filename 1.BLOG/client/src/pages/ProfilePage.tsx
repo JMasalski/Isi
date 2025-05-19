@@ -8,11 +8,20 @@ import UseAuthUser from "@/hooks/useAuthUser.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import PostCard from "@/components/PostCard.tsx";
 import {Post, User} from "@/types/types.ts";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
+import EditProfileForm from "@/components/forms/EditProfileForm.tsx";
 
 
 interface UserProfile {
     user: User;
-    posts:Post[]
+    posts: Post[]
 }
 
 const ProfilePage = () => {
@@ -42,7 +51,7 @@ const ProfilePage = () => {
         }
     }));
 
-    console.log("Full posts",fullPosts)
+    console.log("Full posts", fullPosts)
 
 
     return (
@@ -57,7 +66,7 @@ const ProfilePage = () => {
                         </p>
                     </Link>
                     <div className="h-64 border-y-4 border-black">
-                        <img src={user.backgroundPic|| ""} alt="Cover" loading="lazy"
+                        <img src={user.backgroundPic || ""} alt="Cover" loading="lazy"
                              className="w-full h-full object-cover"/>
                     </div>
                     <div className="p-6">
@@ -67,9 +76,22 @@ const ProfilePage = () => {
                                 <AvatarFallback className="bg-pink-300">ME</AvatarFallback>
                             </Avatar>
                             {isOwner && (
-                                <Button variant={"elevated"}>
-                                    Edit profile
-                                </Button>
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button variant={"elevated"}>
+                                            Edit profile
+                                        </Button>
+                                    </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[425px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ">
+                                            <DialogHeader>
+                                                <DialogTitle>Edit profile</DialogTitle>
+                                                <DialogDescription>
+                                                    Make changes to your profile here. Click save when you're done.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <EditProfileForm />
+                                        </DialogContent>
+                                </Dialog>
                             )}
                         </div>
                         <div className="flex flex-col justify-between p-3 gap-y-2">
@@ -109,7 +131,7 @@ const ProfilePage = () => {
                 </div>
                 {/*Tabs here*/}
                 <div className="bg-white border-2 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <Tabs defaultValue="account" className="w-full ">
+                    <Tabs defaultValue="posts" className="w-full ">
                         <TabsList
                             className="w-full p-3 md:p-6 grid grid-cols-3 border-b-4 border-black rounded-none bg-transparent h-auto">
                             <TabsTrigger value="posts"
@@ -118,6 +140,7 @@ const ProfilePage = () => {
                                 Posts
                             </TabsTrigger>
                             <TabsTrigger value="media"
+
                                          className="data-[state=active]:shadow-[4px_4px_0px_0px_rgba(253,165,213,1)]
                                          rounded-md py-4 font-bold text-lg">
                                 Media
@@ -128,7 +151,7 @@ const ProfilePage = () => {
                                 Liked
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="posts" className="p-5 md:p-10 space-y-5">{fullPosts.map((post)=>(
+                        <TabsContent value="posts" className="p-5 md:p-10 space-y-5">{fullPosts.map((post) => (
                             <PostCard key={post._id} post={post} username={username}/>
                         ))}</TabsContent>
                         <TabsContent value="media">Change your password here.</TabsContent>

@@ -46,6 +46,13 @@ export const getPostById  = async (postId: string)=>{
 }
 
 
+export const deletePost = async (postId: string)=>{
+    const res= await axiosInstance.delete(`/post/delete-post/${postId}`);
+    console.log(res)
+
+    return res.data;
+}
+
 export const addComment = async ({postId, text}: {postId:string, text:string}) => {
     const res = await axiosInstance.put(`post/${postId}/add-comment`,{text})
     return res.data;
