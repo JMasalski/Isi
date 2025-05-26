@@ -31,3 +31,5 @@ export const editProfileSchema = z.object({
     linkBio: z.string().url().optional(),
     backgroundPic: z.string()
 })
+
+export type UpdateProfileData = z.infer<typeof editProfileSchema>;

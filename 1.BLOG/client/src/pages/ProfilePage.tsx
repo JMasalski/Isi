@@ -22,6 +22,7 @@ import EditProfileForm from "@/components/forms/EditProfileForm.tsx";
 interface UserProfile {
     user: User;
     posts: Post[]
+    likedPosts: Post[];
 }
 
 const ProfilePage = () => {
@@ -37,7 +38,9 @@ const ProfilePage = () => {
     if (!userProfile) {
         return <div>Loading...</div>;
     }
-    const {user, posts} = userProfile;
+    console.log(userProfile)
+
+    const {user, posts, likedPosts} = userProfile;
     const isOwner = user._id === authUser._id
     const joinDate = new Date(user.createdAt);
 
@@ -155,7 +158,11 @@ const ProfilePage = () => {
                             <PostCard key={post._id} post={post} username={username}/>
                         ))}</TabsContent>
                         <TabsContent value="media">Change your password here.</TabsContent>
-                        <TabsContent value="liked">liked</TabsContent>
+                        <TabsContent value="liked" className="p-5 md:p-10 space-y-5">
+                            {likedPosts.map((likedPost)=>(
+                                <PostCard key={likedPost._id} post={likedPost} username={username}/>
+                            ))}
+                        </TabsContent>
                     </Tabs>
                 </div>
             </div>

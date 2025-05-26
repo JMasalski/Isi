@@ -8,6 +8,9 @@ import UseAuthUser from "@/hooks/useAuthUser.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useState, useRef} from "react";
 import {Camera, X} from "lucide-react";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {updateUserProfile} from "@/lib/api.ts";
+import toast from "react-hot-toast";
 
 const EditProfileForm = () => {
     const {authUser} = UseAuthUser()
@@ -41,8 +44,19 @@ const EditProfileForm = () => {
         };
     };
 
+    const queryClient =useQueryClient();
+    const {mutate:updateProfile, isPending,} = useMutation({
+        mutationFn: updateUserProfile,
+        onSuccess: ()=>{
+            queryClient.invalidateQueries({queryKey: ["authUser"]})
+        },
+        onError: error =>{
+            toast.error(error.response.data.message);
+        }
+    })
+
     function onSubmit(values: z.infer<typeof editProfileSchema>) {
-        console.log(values)
+        updateProfile(values);
     }
 
     return (
@@ -51,7 +65,7 @@ const EditProfileForm = () => {
                 <div className="relative">
                     <div className="w-full h-40 bg-gray-200 rounded-lg">
                         <img
-                            src={image ? image : "/placeholder.webp"}
+                            src={image ? image : authUser.backgroundPic? authUser.backgroundPic : "/placeholder.webp"}
                             alt="Background"
                             className="w-full h-full rounded-lg object-cover"
                         />

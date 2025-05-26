@@ -1,5 +1,6 @@
 import {User} from "../models/user.model.js";
 import {Blog} from "../models/blog.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const getUserByProfile = async (req,res) =>{
     const {username} = req.params;
@@ -15,7 +16,6 @@ export const getUserByProfile = async (req,res) =>{
         const posts = await Blog.find({ author: existingUser._id })
             .select('content comments likes image createdAt updatedAt')
             .sort({ createdAt: -1 })
-            .limit(5)
             .populate({
                 path: 'comments.user',
                 select: 'name profilePic -_id',
@@ -23,12 +23,26 @@ export const getUserByProfile = async (req,res) =>{
             .populate('likes', '_id') // Dodaj tę linię
             .lean();
 
+        const likedPosts = await Blog.find({ likes: existingUser._id })
+            .select('content author comments likes image createdAt updatedAt')
+            .populate({
+                path: 'author',
+                select: 'name profilePic',
+            })
+            .populate({
+                path: 'comments.user',
+                select: 'name profilePic -_id',
+            })
+            .populate('likes', '_id')
+            .lean().sort({ createdAt: -1 })
 
+        console.log("Liked", likedPosts);
 
         res.status(200).json({
             success:true,
             user:existingUser,
-            posts
+            posts,
+            likedPosts
         })
 
     }catch(err){
@@ -40,15 +54,29 @@ export const getUserByProfile = async (req,res) =>{
     }
 }
 
-export const updatedProfile = async(req,res) =>{
+export const updateProfile = async(req,res) =>{
     try {
-        const {...data} = req.body;
+
+        const {backgroundPic,...data} = req.body;
+
+        let backgroundUrl;
+
+        if (backgroundPic) {
+            const uploadRes = await cloudinary.uploader.upload(backgroundPic);
+            backgroundUrl = uploadRes.secure_url
+        }
+
+        console.log(data,backgroundUrl);
+
         const user = await User.findByIdAndUpdate(req.user.id, {
-            ...data
+            ...data,
+            ...(backgroundUrl && { backgroundPic: backgroundUrl })
         }, {new: true}).select("-password");
+
         if (!user) {
             return res.status(404).json({message: "User not found"});
         }
+        console.log(user);
         res.status(200).json({
             success: true,
             user

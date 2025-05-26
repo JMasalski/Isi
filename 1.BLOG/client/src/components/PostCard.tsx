@@ -72,6 +72,7 @@ const PostCard = ({post, username}: PostCardProps) => {
 
     const isOwner = post.author._id === authUser._id
 
+
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText("http://localhost:5173/post/" + post._id);
@@ -103,7 +104,7 @@ const PostCard = ({post, username}: PostCardProps) => {
         },
     })
 
-    const {mutate: deltePostMutation, data: deleteData} = useMutation({
+    const {mutate: deltePostMutation} = useMutation({
         mutationFn: deletePost,
         onSuccess: (deleteData) => {
             toast.success(deleteData.message)

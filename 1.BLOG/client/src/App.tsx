@@ -7,6 +7,7 @@ import ProfilePage from "./pages/ProfilePage"
 import {Toaster} from "react-hot-toast";
 import useAuthUser from "@/hooks/useAuthUser.tsx";
 import PostPage from "@/pages/PostPage.tsx";
+import LoaderPage from "@/components/LoaderPage.tsx";
 
 
 const App = () => {
@@ -14,7 +15,7 @@ const App = () => {
 
     // Jeśli dane użytkownika są w trakcie ładowania, pokazujemy spinner lub loading
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoaderPage />;
     }
 
     // Jeśli wystąpił błąd, możemy wyświetlić komunikat o błędzie

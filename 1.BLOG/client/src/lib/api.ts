@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axios.ts";
-import {LoginData, SignupData} from "@/lib/formSchemas.ts";
+import {LoginData, SignupData, UpdateProfileData} from "@/lib/formSchemas.ts";
 import { PostFormData } from "@/types/types.ts";
 
 export const signup = async (signupData: SignupData)=>{
@@ -32,6 +32,11 @@ export const getUserProfile = async (username: string) => {
     return res.data
 }
 
+export const updateUserProfile = async(userData: UpdateProfileData) =>{
+    const res = await axiosInstance.put("/user/update-profile", userData);
+    return res.data;
+}
+
 export const createPost = async (postData: PostFormData) => {
     const res = await axiosInstance.post("/post/create-post", postData);
     return res.data;
@@ -62,3 +67,4 @@ export const toggleLike = async  ({postId}:{postId:string}) => {
     const res = await axiosInstance.put(`post/${postId}/toggle-like`)
     return res.data
 }
+

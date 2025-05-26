@@ -11,12 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 import {getPosts} from "@/lib/api";
 import useLogOut from "@/hooks/useLogOut.tsx";
 import useAuthUser from "@/hooks/useAuthUser.tsx";
+import LoaderPage from "@/components/LoaderPage.tsx";
 
 const HomePage = () => {
     const {data:allPosts} = useQuery({
         queryKey: ["posts"],
         queryFn: getPosts,
     })
+    let isLoading =true;
+    if (isLoading) {
+        return <LoaderPage />;
+    }
     const {logoutMutation} = useLogOut()
     const {authUser}= useAuthUser()
     console.log(allPosts)
@@ -51,13 +56,7 @@ const HomePage = () => {
                                     <User className="size-6"/>
                                     Profile
                                 </Link>
-                                <Link
-                                    to="#"
-                                    className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
-                                >
-                                    <Heart className="size-6"/>
-                                    Liked Posts
-                                </Link>
+                                <div className="w-full border-b border-2 border-black"/>
                                 <button
                                     onClick={logoutMutation}
                                     className="cursor-pointer flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors w-full"
@@ -68,10 +67,6 @@ const HomePage = () => {
                                 </button>
                             </nav>
 
-                            <Button variant={"elevated"}
-                                    className="bg-cyan-400 hover:bg-cyan-500 text-black font-bold text-lg">
-                                Post
-                            </Button>
                         </div>
                     </div>
                 </div>
