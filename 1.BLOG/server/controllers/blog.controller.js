@@ -41,7 +41,7 @@ export const getPosts = async (req, res) => {
 
     let query = {};
     if (cursor) {
-      // Pobieramy post referencyjny (aby znać jego createdAt)
+
       const cursorPost = await Blog.findById(cursor);
       if (!cursorPost) return res.status(404).json({ message: "Cursor not found" });
 
