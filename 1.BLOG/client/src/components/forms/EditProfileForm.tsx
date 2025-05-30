@@ -10,7 +10,7 @@ import {useState, useRef} from "react";
 import {Camera, X} from "lucide-react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {updateUserProfile} from "@/lib/api.ts";
-import toast from "react-hot-toast";
+
 
 const EditProfileForm = () => {
     const {authUser} = UseAuthUser()
@@ -38,20 +38,22 @@ const EditProfileForm = () => {
 
         reader.onload = async () => {
             const base64Image = reader.result;
-            setImage(base64Image);
-            console.log("base64Image", base64Image);
-            form.setValue("backgroundPic", base64Image as string);
+            if (typeof base64Image === "string") {
+                setImage(base64Image);
+                form.setValue("backgroundPic", base64Image);
+                console.log("base64Image", base64Image);
+            } else {
+                setImage(null);
+            }
         };
+
     };
 
-    const queryClient =useQueryClient();
-    const {mutate:updateProfile, isPending,} = useMutation({
+    const queryClient = useQueryClient();
+    const {mutate: updateProfile} = useMutation({
         mutationFn: updateUserProfile,
-        onSuccess: ()=>{
+        onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ["authUser"]})
-        },
-        onError: error =>{
-            toast.error(error.response.data.message);
         }
     })
 
@@ -65,7 +67,7 @@ const EditProfileForm = () => {
                 <div className="relative">
                     <div className="w-full h-40 bg-gray-200 rounded-lg">
                         <img
-                            src={image ? image : authUser.backgroundPic? authUser.backgroundPic : "/placeholder.webp"}
+                            src={image ? image : authUser.backgroundPic ? authUser.backgroundPic : "/placeholder.webp"}
                             alt="Background"
                             className="w-full h-full rounded-lg object-cover"
                         />
@@ -79,16 +81,16 @@ const EditProfileForm = () => {
                         />
                         {image && (
                             <button type="button"
-                                           className="absolute top-2 right-2 bg-amber-50 border-2 size-10 flex items-center justify-center rounded-full"
-                                           onClick={() => {
-                                               setImage(null)
-                                               form.setValue("backgroundPic", "")
-                                               if(fileInputRef.current) {
-                                                   fileInputRef.current.value = "";
-                                               }
-                                           }}>
-                            <X/>
-                        </button>)}
+                                    className="absolute top-2 right-2 bg-amber-50 border-2 size-10 flex items-center justify-center rounded-full"
+                                    onClick={() => {
+                                        setImage(null)
+                                        form.setValue("backgroundPic", "")
+                                        if (fileInputRef.current) {
+                                            fileInputRef.current.value = "";
+                                        }
+                                    }}>
+                                <X/>
+                            </button>)}
                         <label
                             className="absolute rounded-full bottom-2 right-2 bg-amber-50 border-2 size-10 flex items-center justify-center"
                             htmlFor="backgroundPic">

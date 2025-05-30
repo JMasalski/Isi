@@ -32,7 +32,6 @@ postRouter.put('/:postId/add-comment', protectRoute, addComment);
 
 //http://localhost:3000/api/v1/post/edit-post/:id
 postRouter.put('/edit-post/:id', protectRoute, editPost);
-//http://localhost:3000/api/v1/post/edit-comment
 
 
 export default postRouter;
