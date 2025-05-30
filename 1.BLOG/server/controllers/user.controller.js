@@ -36,13 +36,27 @@ export const getUserByProfile = async (req,res) =>{
             .populate('likes', '_id')
             .lean().sort({ createdAt: -1 })
 
+        const mediaPosts = await Blog.find({
+            author: existingUser._id,
+            image: { $exists: true, $ne: '' }
+        })
+            .select('content comments likes image createdAt updatedAt')
+            .sort({ createdAt: -1 })
+            .populate({
+                path: 'comments.user',
+                select: 'name profilePic -_id',
+            })
+            .populate('likes', '_id')
+            .lean();
+
         console.log("Liked", likedPosts);
 
         res.status(200).json({
             success:true,
             user:existingUser,
             posts,
-            likedPosts
+            likedPosts,
+            mediaPosts
         })
 
     }catch(err){

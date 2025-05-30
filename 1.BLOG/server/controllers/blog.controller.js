@@ -72,32 +72,7 @@ export const getPosts = async (req, res) => {
 };
 
 
-export const getPostById = async (req, res) => {
-  const {postId} = req.params;
-    if (!postId) {
-        return res.status(400).json({
-        success: false,
-        message: "Post not found",
-        });
-    }
-    try{
-      const post = await Blog.findById(postId).
-      populate("author", "name profilePic").populate({
-        path: "comments.user",
-        select: "name profilePic -_id",
-      }).populate("likes", "_id")
-      return res.status(200).json({
-        success: true,
-        post
-      })
-    }catch(err){
-        console.log("Error in getPostById: ", err);
-        return res.status(500).json({
-            success: false,
-            message: "Server error",
-        });
-    }
-};
+
 
 export const editPost = async (req, res) => {
   const { ...data } = req.body;
@@ -241,100 +216,6 @@ export const addComment = async (req, res) => {
   } catch (err) {
     console.log("Error in toggleLike: ", err);
     return res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
-};
-export const editComment = async (req, res) => {
-  try {
-    const { postId, commentId, newText } = req.body;
-
-    const post = await Blog.findById(postId);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: "Post not found",
-      });
-    }
-
-    // znajdź komentarz
-    const comment = post.comments.id(commentId);
-
-    if (!comment) {
-      return res.status(404).json({
-        success: false,
-        message: "Comment not found",
-      });
-    }
-
-    if (comment.user.toString() !== req.user.id) {
-      return res.status(403).json({
-        success: false,
-        message: "You are not allowed to edit this comment",
-      });
-    }
-
-    comment.text = newText;
-
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Comment updated successfully",
-      comment,
-    });
-  } catch (err) {
-    console.log("Error in editComment: ", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
-};
-
-export const deleteComment = async (req, res) => {
-  try {
-    const { postId, commentId } = req.body;
-
-    const post = await Blog.findById(postId);
-
-    if (!post) {
-      return res.status(404).json({
-        success: false,
-        message: "Post not found",
-      });
-    }
-
-    const comment = post.comments.id(commentId);
-
-    if (!comment) {
-      return res.status(404).json({
-        success: false,
-        message: "Comment not found",
-      });
-    }
-
-    if (comment.user.toString() !== req.user.id) {
-      return res.status(403).json({
-        success: false,
-        message: "You are not allowed to delete this comment",
-      });
-    }
-
-    post.comments.pull(commentId);
-    
-    await post.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Comment deleted successfully",
-      comment,
-    });
-  } catch (err) {
-    console.log("Error in deleteComment: ", err);
-    res.status(500).json({
       success: false,
       message: "Server error",
     });

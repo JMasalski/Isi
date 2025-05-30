@@ -41,10 +41,13 @@ export const createPost = async (postData: PostFormData) => {
     const res = await axiosInstance.post("/post/create-post", postData);
     return res.data;
 }
-export const getPosts = async () => {
-    const res = await axiosInstance.get("/post/get-posts");
-    return res.data.posts;
-}
+export const getPosts = async ({ pageParam = null }) => {
+    const limit = 5;
+    const cursorParam = pageParam ? `&cursor=${encodeURIComponent(pageParam)}` : "";
+    const res = await axiosInstance.get(`/post/get-posts?limit=${limit}${cursorParam}`);
+    return res.data;
+};
+
 export const getPostById  = async (postId: string)=>{
     const res = await axiosInstance.get(`/post/${postId}`);
     return res.data.post;

@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Heart, MessageCircle, Share, Trash, X} from "lucide-react";
+import {Heart, MessageCircle, Trash, X} from "lucide-react";
 import {Post} from "@/types/types.ts";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {addComment, deletePost, toggleLike} from "@/lib/api";
@@ -73,14 +73,7 @@ const PostCard = ({post, username}: PostCardProps) => {
     const isOwner = post.author._id === authUser._id
 
 
-    const handleCopy = async () => {
-        try {
-            await navigator.clipboard.writeText("http://localhost:5173/post/" + post._id);
-            toast.success("Copied to clipboard!");
-        } catch (e) {
-            console.error("Failed to copy: ", e);
-        }
-    }
+
 
 
     const hasLiked = post.likes.some((like) => like._id === authUser._id);
@@ -186,7 +179,7 @@ const PostCard = ({post, username}: PostCardProps) => {
                         />
                     )}
 
-                    <div className="flex justify-between">
+                    <div className="flex space-x-50 mt-5">
                         <button
                             className="flex items-center gap-1"
                             onClick={() => toggleLikeMutation({postId: post._id})}>
@@ -201,9 +194,7 @@ const PostCard = ({post, username}: PostCardProps) => {
                                 className={`h-5 w-5 ${showComments ? "text-green-500" : "hover:text-green-500"}`}/>
                             <span>{comments.length}</span>
                         </button>
-                        <button onClick={handleCopy} className="flex items-center gap-1 hover:text-purple-500">
-                            <Share className="h-5 w-5"/>
-                        </button>
+
                     </div>
                 </div>
             </div>

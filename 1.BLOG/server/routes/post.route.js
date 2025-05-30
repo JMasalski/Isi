@@ -2,10 +2,8 @@ import {Router} from "express";
 import {protectRoute} from "../middleware/auth.js";
 import {
     addComment, createPost,
-    deleteComment,
-    deletePost,
-    editComment, editPost,
-    getPostById, getPosts,
+    deletePost,editPost,
+    getPosts,
     toggleLike
 } from "../controllers/blog.controller.js";
 
@@ -32,16 +30,9 @@ postRouter.put('/:postId/toggle-like', protectRoute, toggleLike);
 postRouter.put('/:postId/add-comment', protectRoute, addComment);
 
 
-
-
-//http://localhost:3000/api/v1/post/:id
-postRouter.get('/:postId', getPostById);
 //http://localhost:3000/api/v1/post/edit-post/:id
 postRouter.put('/edit-post/:id', protectRoute, editPost);
 //http://localhost:3000/api/v1/post/edit-comment
-postRouter.put('/edit-comment/', protectRoute, editComment)
-//http://localhost:3000/api/v1/post/delete-comment
-postRouter.delete('/delete-comment/', protectRoute, deleteComment)
 
 
 export default postRouter;

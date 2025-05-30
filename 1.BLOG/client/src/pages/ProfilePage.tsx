@@ -17,12 +17,14 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog.tsx";
 import EditProfileForm from "@/components/forms/EditProfileForm.tsx";
+import LoaderPage from "@/components/LoaderPage.tsx";
 
 
 interface UserProfile {
     user: User;
     posts: Post[]
     likedPosts: Post[];
+    mediaPosts: Post[];
 }
 
 const ProfilePage = () => {
@@ -36,15 +38,14 @@ const ProfilePage = () => {
         enabled: !!username,
     });
     if (!userProfile) {
-        return <div>Loading...</div>;
+        return <LoaderPage/>;
     }
     console.log(userProfile)
 
-    const {user, posts, likedPosts} = userProfile;
+    const {user, posts, likedPosts, mediaPosts} = userProfile;
     const isOwner = user._id === authUser._id
     const joinDate = new Date(user.createdAt);
 
-    console.log(posts)
     const fullPosts: Post[] = posts.map((post) => ({
         ...post,
         author: {
@@ -54,12 +55,21 @@ const ProfilePage = () => {
         }
     }));
 
+    const fullMediaPost: Post[] = mediaPosts.map((post) => ({
+        ...post,
+        author: {
+            _id: user._id,
+            name: user.name,
+            profilePic: user.profilePic,
+        }
+    }));
+
+
     console.log("Full posts", fullPosts)
 
 
     return (
         <div className="min-h-screen bg-yellow-50 flex flex-col w-full p-2 md:p-4 lg:p-10">
-            {/*Okno z profilem użytkownika*/}
             <div className="flex flex-col gap-y-4  w-full">
                 <div className="bg-white rounded-xl border-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <Link to={'/'} className="flex items-center gap-2 p-4">
@@ -69,8 +79,13 @@ const ProfilePage = () => {
                         </p>
                     </Link>
                     <div className="h-64 border-y-4 border-black">
-                        <img src={user.backgroundPic || ""} alt="Cover" loading="lazy"
-                             className="w-full h-full object-cover"/>
+                        <img
+                            src={user.backgroundPic?.trim() ? user.backgroundPic : "/placeholder.webp"}
+                            alt="Cover"
+                            loading="lazy"
+                            className="w-full h-full object-cover"
+                        />
+
                     </div>
                     <div className="p-6">
                         <div className="flex justify-between">
@@ -85,15 +100,15 @@ const ProfilePage = () => {
                                             Edit profile
                                         </Button>
                                     </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[425px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ">
-                                            <DialogHeader>
-                                                <DialogTitle>Edit profile</DialogTitle>
-                                                <DialogDescription>
-                                                    Make changes to your profile here. Click save when you're done.
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <EditProfileForm />
-                                        </DialogContent>
+                                    <DialogContent className="sm:max-w-[425px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ">
+                                        <DialogHeader>
+                                            <DialogTitle>Edit profile</DialogTitle>
+                                            <DialogDescription>
+                                                Make changes to your profile here. Click save when you're done.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <EditProfileForm/>
+                                    </DialogContent>
                                 </Dialog>
                             )}
                         </div>
@@ -154,15 +169,43 @@ const ProfilePage = () => {
                                 Liked
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="posts" className="p-5 md:p-10 space-y-5">{fullPosts.map((post) => (
-                            <PostCard key={post._id} post={post} username={username}/>
-                        ))}</TabsContent>
-                        <TabsContent value="media">Change your password here.</TabsContent>
-                        <TabsContent value="liked" className="p-5 md:p-10 space-y-5">
-                            {likedPosts.map((likedPost)=>(
-                                <PostCard key={likedPost._id} post={likedPost} username={username}/>
-                            ))}
+                        <TabsContent value="posts" className="p-5 md:p-10 space-y-5">
+                            {fullPosts?.length > 0 ? (
+                                fullPosts.map((post) => (
+                                    <PostCard key={post._id} post={post} username={username} />
+                                ))
+                            ) : (
+                                <div className="flex justify-center items-center h-40 text-center text-gray-500 font-semibold">
+                                    No posts found.
+                                </div>
+                            )}
                         </TabsContent>
+
+                        <TabsContent value="media" className="p-5 md:p-10 space-y-5">
+                            {fullMediaPost?.length > 0 ? (
+                                fullMediaPost.map((mediaPost) => (
+                                    <PostCard key={mediaPost._id} post={mediaPost} username={username} />
+                                ))
+                            ) : (
+                                <div className="flex justify-center items-center h-40 text-center text-gray-500 font-semibold">
+                                    No media posts found.
+                                </div>
+                            )}
+                        </TabsContent>
+
+                        <TabsContent value="liked" className="p-5 md:p-10 space-y-5">
+                            {likedPosts?.length > 0 ? (
+                                likedPosts.map((likedPost) => (
+                                    <PostCard key={likedPost._id} post={likedPost} username={username} />
+                                ))
+                            ) : (
+                                <div className="flex justify-center items-center h-40 text-center text-gray-500 font-semibold">
+                                    No liked posts found.
+                                </div>
+                            )}
+                        </TabsContent>
+
+
                     </Tabs>
                 </div>
             </div>

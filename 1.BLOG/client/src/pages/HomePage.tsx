@@ -1,41 +1,61 @@
-import {Link} from "react-router";
-import { Heart, Home, LogOut, User} from "lucide-react";
-import {Button} from "@/components/ui/button.tsx";
+import { Link } from "react-router";
+import { Home, LogOut, User } from "lucide-react";
 
-
-import {Post} from "@/types/types.ts";
-import PostCard from "@/components/PostCard.tsx";
-
+import PostCard from "@/components/PostCard";
 import NewPostForm from "@/components/forms/NewPostForm";
-import { useQuery } from "@tanstack/react-query";
-import {getPosts} from "@/lib/api";
-import useLogOut from "@/hooks/useLogOut.tsx";
-import useAuthUser from "@/hooks/useAuthUser.tsx";
-import LoaderPage from "@/components/LoaderPage.tsx";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getPosts } from "@/lib/api";
+import useLogOut from "@/hooks/useLogOut";
+import useAuthUser from "@/hooks/useAuthUser";
+import { useEffect, useRef } from "react";
 
 const HomePage = () => {
-    const {data:allPosts} = useQuery({
+    const { logoutMutation } = useLogOut();
+    const { authUser } = useAuthUser();
+
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+
+    } = useInfiniteQuery({
         queryKey: ["posts"],
         queryFn: getPosts,
-    })
-    let isLoading =true;
-    if (isLoading) {
-        return <LoaderPage />;
-    }
-    const {logoutMutation} = useLogOut()
-    const {authUser}= useAuthUser()
-    console.log(allPosts)
+        initialPageParam: null,
+        getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    });
 
+    const bottomRef = useRef(null);
+
+    // Observer that triggers fetching next page
+    useEffect(() => {
+        if (!hasNextPage || isFetchingNextPage) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 1 }
+        );
+
+        if (bottomRef.current) observer.observe(bottomRef.current);
+
+        return () => {
+            if (bottomRef.current) observer.unobserve(bottomRef.current);
+        };
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
 
     return (
         <div className="min-h-screen bg-yellow-50">
-            {/* Main layout */}
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 p-4">
-                {/* Left sidebar */}
-                {/* //TODO: MAKE IT RESPONSIVE AND STICKY  */}
-                <div className="md:col-span-3 sticky top-3 self-start">
-                    <div
-                        className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                {/* Left Sidebar */}
+                <div className="md:col-span-3 md:sticky top-3 self-start">
+                    <div className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                         <div className="flex flex-col gap-6">
                             <Link to="/" className="text-3xl font-black">
                                 BLOGR
@@ -46,44 +66,51 @@ const HomePage = () => {
                                     to="/"
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
-                                    <Home className="size-6"/>
+                                    <Home className="size-6" />
                                     Home
                                 </Link>
                                 <Link
-                                    to={`/profile/${authUser.name}`}
+                                    to={`/profile/${authUser?.name}`}
                                     className="flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors"
                                 >
-                                    <User className="size-6"/>
+                                    <User className="size-6" />
                                     Profile
                                 </Link>
-                                <div className="w-full border-b border-2 border-black"/>
+                                <div className="w-full border-b border-2 border-black" />
                                 <button
-                                    onClick={logoutMutation}
+                                    onClick={() => logoutMutation()}
                                     className="cursor-pointer flex items-center gap-3 text-lg font-bold hover:bg-pink-200 p-2 rounded-lg transition-colors w-full"
-
                                 >
-                                    <LogOut className="size-6"/>
+                                    <LogOut className="size-6" />
                                     Logout
                                 </button>
                             </nav>
-
                         </div>
                     </div>
                 </div>
-                {/* Main content */}
+
+                {/* Main Content */}
                 <div className="md:col-span-9">
-                    <div
-                        className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
+                    <div className="bg-white border-4 border-black rounded-xl p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mb-4">
                         <h1 className="text-2xl font-black mb-4">Home</h1>
-                            <NewPostForm/>
+                        <NewPostForm />
+
                         <div className="space-y-6">
-                            {allPosts?.map((post:Post) => <PostCard key={post._id} post={post}/>)}
+                            {allPosts.map((post) => (
+                                <PostCard key={post._id} post={post} />
+                            ))}
                         </div>
+
+                        {isFetchingNextPage && (
+                            <p className="text-center text-gray-500 mt-4">Loading more...</p>
+                        )}
+
+                        <div ref={bottomRef} className="h-1" />
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;
