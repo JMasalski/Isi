@@ -179,7 +179,7 @@ const PostCard = ({post, username}: PostCardProps) => {
                         />
                     )}
 
-                    <div className="flex space-x-50 mt-5">
+                    <div className="grid grid-cols-3 mt-5">
                         <button
                             className="flex items-center gap-1"
                             onClick={() => toggleLikeMutation({postId: post._id})}>
@@ -194,6 +194,7 @@ const PostCard = ({post, username}: PostCardProps) => {
                                 className={`h-5 w-5 ${showComments ? "text-green-500" : "hover:text-green-500"}`}/>
                             <span>{comments.length}</span>
                         </button>
+                        <div/>
 
                     </div>
                 </div>
